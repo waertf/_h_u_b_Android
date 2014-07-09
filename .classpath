@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="var" path="USER_HOME/AppData/Local/Android/android-sdk/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Downloads/slf4j-api-1.7.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Downloads/logback-android-1.1.1-2.jar"/>
 	<classpathentry kind="output" path="out/production/yourapp"/>
 </classpath>

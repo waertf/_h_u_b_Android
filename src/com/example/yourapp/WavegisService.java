@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by wavegis on 2014/7/8.
@@ -41,6 +43,13 @@ public class WavegisService extends Service {
             boolean result =mBluetoothAdapter.enable();
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
+
+        Logger log = LoggerFactory.getLogger(WavegisService.class);
+        log.trace("trace");
+        log.debug("debug");
+        log.info("info");
+        log.warn("warn");
+        log.error("error");
 
     }
 
