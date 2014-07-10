@@ -45,8 +45,8 @@ public class WavegisService extends Service {
         }
 
         Logger log = LoggerFactory.getLogger(WavegisService.class);
-        log.trace("trace");
-        log.debug("debug");
+        //log.trace("trace");
+        //log.debug("debug");
         log.info("info");
         log.warn("warn");
         log.error("error");
