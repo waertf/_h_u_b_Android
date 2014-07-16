@@ -14,6 +14,8 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
+
 /**
  * Created by wavegis on 2014/7/8.
  */
@@ -43,13 +45,21 @@ public class WavegisService extends Service {
             boolean result =mBluetoothAdapter.enable();
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
-
+        setDiscoverableTimeout(300);
+        /*
+        Intent discoverableIntent = new
+                Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(discoverableIntent);
+*/
+        /*
         Logger log = LoggerFactory.getLogger(WavegisService.class);
-        //log.trace("trace");
-        //log.debug("debug");
+
         log.info("info");
         log.warn("warn");
         log.error("error");
+        */
 
     }
 
@@ -83,4 +93,33 @@ public class WavegisService extends Service {
             Log.d("WavegisService receiver", "Got message: " + message);
         }
     };
+    public void setDiscoverableTimeout(int timeout) {
+        BluetoothAdapter adapter=BluetoothAdapter.getDefaultAdapter();
+        try {
+            Method setDiscoverableTimeout = BluetoothAdapter.class.getMethod("setDiscoverableTimeout", int.class);
+            setDiscoverableTimeout.setAccessible(true);
+            Method setScanMode =BluetoothAdapter.class.getMethod("setScanMode", int.class,int.class);
+            setScanMode.setAccessible(true);
+
+            setDiscoverableTimeout.invoke(adapter, timeout);
+            setScanMode.invoke(adapter, BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE,timeout);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeDiscoverableTimeout() {
+        BluetoothAdapter adapter=BluetoothAdapter.getDefaultAdapter();
+        try {
+            Method setDiscoverableTimeout = BluetoothAdapter.class.getMethod("setDiscoverableTimeout", int.class);
+            setDiscoverableTimeout.setAccessible(true);
+            Method setScanMode =BluetoothAdapter.class.getMethod("setScanMode", int.class,int.class);
+            setScanMode.setAccessible(true);
+
+            setDiscoverableTimeout.invoke(adapter, 1);
+            setScanMode.invoke(adapter, BluetoothAdapter.SCAN_MODE_CONNECTABLE,1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
