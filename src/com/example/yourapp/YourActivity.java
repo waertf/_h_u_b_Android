@@ -10,14 +10,17 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.TextView;
 
 public class YourActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
+    TextView txtView=null;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        txtView=(TextView)findViewById(R.id.textView);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("WavegisService"));
 
@@ -49,6 +52,7 @@ public class YourActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
+            txtView.append(message);
             Log.d("YourActivity receiver", "Got message: " + message);
         }
     };
