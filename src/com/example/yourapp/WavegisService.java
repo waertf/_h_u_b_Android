@@ -21,7 +21,9 @@ import java.lang.reflect.Method;
  */
 public class WavegisService extends Service {
     private Handler handler = new Handler();
+    private Handler closeDiscoverableHandler=new Handler();
     private BluetoothAdapter mBluetoothAdapter = null;
+    private int closeDiscoverableTimeout=300*1000;//unit:sec
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -45,7 +47,8 @@ public class WavegisService extends Service {
             boolean result =mBluetoothAdapter.enable();
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
-        setDiscoverableTimeout(300);
+        setDiscoverableTimeout(closeDiscoverableTimeout);
+        closeDiscoverableHandler.postDelayed(CloseDiscoverableRunnable,closeDiscoverableTimeout);
         /*
         Intent discoverableIntent = new
                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -75,6 +78,12 @@ public class WavegisService extends Service {
             //Log.i("time:", new Date().toString());
             SendBroadcast("任務:路況");
             handler.postDelayed(this, 1000);
+        }
+    };
+    private Runnable CloseDiscoverableRunnable=new Runnable(){
+        @Override
+        public void run() {
+            closeDiscoverableTimeout();
         }
     };
 
