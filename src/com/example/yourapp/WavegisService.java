@@ -45,9 +45,11 @@ public class WavegisService extends Service {
         super.onStart(intent, startId);
         if (!mBluetoothAdapter.isEnabled()) {
             boolean result =mBluetoothAdapter.enable();
+            SendBroadcast("BT enable");
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
         setDiscoverableTimeout(closeDiscoverableTimeout);
+        SendBroadcast("BT Discoverable");
         closeDiscoverableHandler.postDelayed(CloseDiscoverableRunnable,closeDiscoverableTimeout);
         /*
         Intent discoverableIntent = new
@@ -127,6 +129,7 @@ public class WavegisService extends Service {
 
             setDiscoverableTimeout.invoke(adapter, 1);
             setScanMode.invoke(adapter, BluetoothAdapter.SCAN_MODE_CONNECTABLE,1);
+            SendBroadcast("BT Close Discoverable");
         } catch (Exception e) {
             e.printStackTrace();
         }
