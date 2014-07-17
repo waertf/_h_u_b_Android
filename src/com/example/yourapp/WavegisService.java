@@ -8,9 +8,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 import org.apache.http.util.EncodingUtils;
@@ -99,9 +101,12 @@ public class WavegisService extends Service {
     };
 
     private void SendBroadcast(String txt) {
+        Time t=new Time("GMT+8");
+        t.setToNow();
+        String now = t.format("%Y-%m-%d T%H:%M:%S");
         Intent intent = new Intent("WavegisService");
-        intent.putExtra("message",txt);
-        Log.d("sender", "WavegisService Broadcasting message:"+txt);
+        intent.putExtra("message", now+":"+txt+ "\n");
+        Log.d("sender", "WavegisService Broadcasting message:" + txt);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
