@@ -33,6 +33,8 @@ public class WavegisService extends Service {
     private Handler closeDiscoverableHandler=new Handler();
     private BluetoothAdapter mBluetoothAdapter = null;
     private int closeDiscoverableTimeout=300*1000;//unit:sec
+    private ConnectedThread mConnectedThread=null;
+    private AcceptThread mInsecureAcceptThread=null;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -59,7 +61,7 @@ public class WavegisService extends Service {
         }
         setDiscoverableTimeout(closeDiscoverableTimeout);
         SendBroadcast("BT Discoverable");
-        Thread mInsecureAcceptThread = new AcceptThread(mBluetoothAdapter);
+        mInsecureAcceptThread = new AcceptThread(mBluetoothAdapter);
         mInsecureAcceptThread.start();
         closeDiscoverableHandler.postDelayed(CloseDiscoverableRunnable,closeDiscoverableTimeout);
         /*
@@ -174,20 +176,28 @@ public class WavegisService extends Service {
                     if(mmServerSocket!=null)
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
+                    SendBroadcast(e.toString());
                     break;
                 }
                 // If a connection was accepted
                 if (socket != null) {
                     // Do work to manage the connection (in a separate thread)
-                    Thread mConnectedThread = new ConnectedThread(socket);
+                    if(mConnectedThread!=null)
+                    {
+                        mConnectedThread.cancel();
+                        mConnectedThread=null;
+                    }
+                    mConnectedThread = new ConnectedThread(socket);
                     mConnectedThread.start();
                     //manageConnectedSocket(socket);
+                    /*
                     try {
                         mmServerSocket.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    break;
+                    */
+                    //break;
                 }
             }
         }
