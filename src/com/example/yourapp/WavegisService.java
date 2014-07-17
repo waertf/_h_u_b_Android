@@ -59,6 +59,7 @@ public class WavegisService extends Service {
             SendBroadcast("BT enable");
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
+        while (!mBluetoothAdapter.isEnabled());
         setDiscoverableTimeout(closeDiscoverableTimeout);
         SendBroadcast("BT Discoverable");
         mInsecureAcceptThread = new AcceptThread(mBluetoothAdapter);
