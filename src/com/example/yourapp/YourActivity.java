@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.content.LocalBroadcastManager;
@@ -50,9 +51,12 @@ public class YourActivity extends Activity {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Time t=new Time("GMT+8");
+            t.setToNow();
+            String now = t.format("%Y-%m-%d T%H:%M:%S");
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
-            txtView.append(message);
+            txtView.append( now+":"+message+ "\n");
             Log.d("YourActivity receiver", "Got message: " + message);
         }
     };
@@ -67,8 +71,8 @@ public class YourActivity extends Activity {
     };
     private void SendBroadcast(String txt) {
         Intent intent = new Intent("YourActivity");
-        intent.putExtra("message",txt+"\n");
-        Log.d("sender", "YourActivity Broadcasting message:"+txt);
+        intent.putExtra("message",txt);
+        Log.d("sender", "YourActivity Broadcasting message:" + txt);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

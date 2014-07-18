@@ -108,7 +108,8 @@ public class WavegisService extends Service {
         t.setToNow();
         String now = t.format("%Y-%m-%d T%H:%M:%S");
         Intent intent = new Intent("WavegisService");
-        intent.putExtra("message", now+":"+txt+ "\n");
+        //intent.putExtra("message", now+":"+txt+ "\n");
+        intent.putExtra("message", txt);
         Log.d("sender", "WavegisService Broadcasting message:" + txt);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
@@ -179,7 +180,7 @@ public class WavegisService extends Service {
                     if(mmServerSocket!=null)
                     socket = mmServerSocket.accept();
                 } catch (IOException e) {
-                    SendBroadcast(e.toString());
+                    //SendBroadcast(e.toString());
                     break;
                 }
                 // If a connection was accepted
