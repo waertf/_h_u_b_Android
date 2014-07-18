@@ -62,7 +62,7 @@ public class YourActivity extends Activity {
             //log目前時間
             //Log.i("time:", new Date().toString());
             SendBroadcast("速度:電量");
-            //handler.postDelayed(this, 1000);
+            handler.postDelayed(this, 1000);
         }
     };
     private void SendBroadcast(String txt) {
