@@ -118,6 +118,8 @@ public class WavegisService extends Service {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
+            if(mConnectedThread!=null)
+            mConnectedThread.write(message.getBytes());
             Log.d("WavegisService receiver", "Got message: " + message);
         }
     };
