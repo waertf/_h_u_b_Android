@@ -67,7 +67,7 @@ public class YourActivity extends Activity {
     };
     private void SendBroadcast(String txt) {
         Intent intent = new Intent("YourActivity");
-        intent.putExtra("message",txt);
+        intent.putExtra("message",txt+"\n");
         Log.d("sender", "YourActivity Broadcasting message:"+txt);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
