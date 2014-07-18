@@ -64,7 +64,7 @@ public class WavegisService extends Service {
         SendBroadcast("BT Discoverable");
         mInsecureAcceptThread = new AcceptThread(mBluetoothAdapter);
         mInsecureAcceptThread.start();
-        closeDiscoverableHandler.postDelayed(CloseDiscoverableRunnable,closeDiscoverableTimeout);
+        //closeDiscoverableHandler.postDelayed(CloseDiscoverableRunnable,closeDiscoverableTimeout);
         /*
         Intent discoverableIntent = new
                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
