@@ -1,14 +1,20 @@
 package com.example.ODBII;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class MyActivity extends Activity {
     /**
@@ -18,11 +24,35 @@ public class MyActivity extends Activity {
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
     private Activity myActivity;
+    private BluetoothAdapter mBluetoothAdapter = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         myActivity=this;
+        // Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // If the adapter is null, then Bluetooth is not supported
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!mBluetoothAdapter.isEnabled()) {
+            boolean result =mBluetoothAdapter.enable();
+            Log.i("mBluetoothAdapter.enable",String.valueOf(result));
+        }
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+// If there are paired devices
+        ListView Olalist = (ListView) this.findViewById(R.id.listview1);
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1);
+        if (pairedDevices.size() > 0) {
+            // Loop through paired devices
+            for (BluetoothDevice device : pairedDevices) {
+                // Add the name and address to an array adapter to show in a ListView
+                mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        }
         /*
         new Thread(new Runnable() {
             public void run() {
