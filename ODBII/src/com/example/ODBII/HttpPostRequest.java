@@ -11,6 +11,7 @@ import java.util.Map;
 public class HttpPostRequest implements Runnable {
     private String parameter;
     private String URL;
+    private String result;
     public HttpPostRequest(String URL,String parameter)
     {
         this.URL=URL;
@@ -26,7 +27,11 @@ public class HttpPostRequest implements Runnable {
             String[] keyValue = pair.split(":");
             myMap.put(keyValue[0], keyValue[1]);
         }
-        String result = JieHttpClient.POST(URL,myMap);
+        result = JieHttpClient.POST(URL,myMap);
         Log.d(this.toString(),"send http post-" + parameter + "-result:" + result);
+    }
+    public String getResult()
+    {
+        return "send http post-" + parameter + "-result:" + result;
     }
 }
