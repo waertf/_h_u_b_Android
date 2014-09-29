@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -33,6 +37,32 @@ public class MyActivity extends Activity {
     private final UUID MY_UUID= UUID.fromString("");
     private final String ODBIIDeviceName="";
     private String ODBIIMacAddress="";
+    private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
+        public void onReceive(Context context,Intent intent){
+            String action=intent.getAction();
+            //找到裝置後的處理
+            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice device=intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //取得名稱
+                /*
+                if(device.getName()==null){mNewDevicesArryAdapter.add("unKnow");}
+                else
+                {mNewDevicesArryAdapter.add(device.getName());}
+                mAddress.add(device.getAddress());//取得地址//mAddress是我拿來放實體地址的地方
+                ArrayAdapter<String> adapter=new ArrayAdapter<String>//創建LIST
+                        (LIST創建參數1,LIST創建參數2);
+                        */
+                //我的方法是創建一個  LIST然後顯示出來 按下LIST之後進行連線
+
+                if(device.getName()!=null){
+                    if(ODBIIDeviceName.equalsIgnoreCase(device.getName())){
+                        Thread connectThread = new ConnectThread(device);
+                        connectThread.start();
+                    }
+                }
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +98,8 @@ public class MyActivity extends Activity {
             }
         }
         else {
-            
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
+            registerReceiver(mReceiver,filter);
         }
         Olalist.setAdapter(mArrayAdapter);
         /*
