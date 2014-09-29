@@ -55,8 +55,8 @@
       <file leaf-file-name="MyActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="12.098131" vertical-offset="279" max-vertical-offset="5882">
-              <caret line="331" column="78" selection-start-line="331" selection-start-column="78" selection-end-line="331" selection-end-column="78" />
+            <state vertical-scroll-proportion="0.6846154" vertical-offset="5488" max-vertical-offset="6409">
+              <caret line="359" column="40" selection-start-line="359" selection-start-column="40" selection-end-line="359" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -672,12 +672,12 @@
       <workItem from="1411698236253" duration="17870000" />
       <workItem from="1411953280965" duration="100000" />
       <workItem from="1411953479681" duration="7896000" />
-      <workItem from="1411977460393" duration="2545000" />
+      <workItem from="1411977460393" duration="4388000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109909000" />
+    <option name="totallyTimeSpent" value="111752000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1320" height="784" extended-state="6" />
@@ -697,7 +697,7 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32840237" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840237" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31656805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24963397" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -753,43 +753,43 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>257</line>
+          <line>263</line>
           <properties />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>220</line>
+          <line>226</line>
           <properties />
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>118</line>
+          <line>124</line>
           <properties />
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>74</line>
+          <line>80</line>
           <properties />
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>110</line>
+          <line>116</line>
           <properties />
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>241</line>
+          <line>247</line>
           <properties />
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>225</line>
+          <line>231</line>
           <properties />
           <option name="timeStamp" value="37" />
         </line-breakpoint>
@@ -1191,8 +1191,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="12.098131" vertical-offset="279" max-vertical-offset="5882">
-          <caret line="331" column="78" selection-start-line="331" selection-start-column="78" selection-end-line="331" selection-end-column="78" />
+        <state vertical-scroll-proportion="0.6846154" vertical-offset="5488" max-vertical-offset="6409">
+          <caret line="359" column="40" selection-start-line="359" selection-start-column="40" selection-end-line="359" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

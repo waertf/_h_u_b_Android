@@ -18,9 +18,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import pt.lighthouselabs.obd.commands.SpeedObdCommand;
+import pt.lighthouselabs.obd.commands.control.TroubleCodesObdCommand;
+import pt.lighthouselabs.obd.commands.engine.EngineLoadObdCommand;
 import pt.lighthouselabs.obd.commands.engine.EngineRPMObdCommand;
 import pt.lighthouselabs.obd.commands.engine.MassAirFlowObdCommand;
 import pt.lighthouselabs.obd.commands.engine.ThrottlePositionObdCommand;
+import pt.lighthouselabs.obd.commands.fuel.FuelConsumptionRateObdCommand;
+import pt.lighthouselabs.obd.commands.fuel.FuelLevelObdCommand;
+import pt.lighthouselabs.obd.commands.pressure.FuelPressureObdCommand;
+import pt.lighthouselabs.obd.commands.pressure.IntakeManifoldPressureObdCommand;
 import pt.lighthouselabs.obd.commands.protocol.EchoOffObdCommand;
 import pt.lighthouselabs.obd.commands.protocol.LineFeedOffObdCommand;
 import pt.lighthouselabs.obd.commands.protocol.SelectProtocolObdCommand;
@@ -311,6 +317,15 @@ public class MyActivity extends Activity {
             ThrottlePositionObdCommand throttlePositionObdCommand = new ThrottlePositionObdCommand();
             EngineCoolantTemperatureObdCommand engineCoolantTemperatureObdCommand = new EngineCoolantTemperatureObdCommand();
             MassAirFlowObdCommand massAirFlowObdCommand = new MassAirFlowObdCommand();
+            TroubleCodesObdCommand troubleCodesObdCommand = new TroubleCodesObdCommand();
+            EngineLoadObdCommand engineLoadObdCommand = new EngineLoadObdCommand();
+            ThrottlePositionObdCommand throttlePositionObdCommand1 = new ThrottlePositionObdCommand();
+
+            FuelLevelObdCommand fuelLevelObdCommand = new FuelLevelObdCommand();
+            FuelPressureObdCommand fuelPressureObdCommand = new FuelPressureObdCommand();
+            FuelConsumptionRateObdCommand fuelConsumptionRateObdCommand = new FuelConsumptionRateObdCommand();
+            IntakeManifoldPressureObdCommand intakeManifoldPressureObdCommand = new IntakeManifoldPressureObdCommand();
+
             while (!Thread.currentThread().isInterrupted())
             {
                 try {
@@ -319,6 +334,14 @@ public class MyActivity extends Activity {
                     throttlePositionObdCommand.run(mmInStream,mmOutStream);
                     engineCoolantTemperatureObdCommand.run(mmInStream,mmOutStream);
                     massAirFlowObdCommand.run(mmInStream,mmOutStream);
+                    troubleCodesObdCommand.run(mmInStream,mmOutStream);
+                    engineLoadObdCommand.run(mmInStream,mmOutStream);
+                    throttlePositionObdCommand1.run(mmInStream,mmOutStream);
+
+                    fuelLevelObdCommand.run(mmInStream,mmOutStream);
+                    fuelPressureObdCommand.run(mmInStream,mmOutStream);
+                    fuelConsumptionRateObdCommand.run(mmInStream,mmOutStream);
+                    intakeManifoldPressureObdCommand.run(mmInStream,mmOutStream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -330,6 +353,14 @@ public class MyActivity extends Activity {
                 Log.d(this.toString(), "ThrottlePosition: " + throttlePositionObdCommand.getFormattedResult());
                 Log.d(this.toString(), "EngineCoolantTemperature: " + engineCoolantTemperatureObdCommand.getFormattedResult());
                 Log.d(this.toString(), "MassAirFlow: " + massAirFlowObdCommand.getFormattedResult());
+                Log.d(this.toString(), "TroubleCodes: " + troubleCodesObdCommand.getFormattedResult());
+                Log.d(this.toString(), "EngineLoad: " + engineLoadObdCommand.getFormattedResult());
+                Log.d(this.toString(), "ThrottlePosition: " + throttlePositionObdCommand1.getFormattedResult());
+
+                Log.d(this.toString(), "FuelLevel: " + fuelLevelObdCommand.getFormattedResult());
+                Log.d(this.toString(), "FuelPressure: " + fuelPressureObdCommand.getFormattedResult());
+                Log.d(this.toString(), "FuelConsumptionRate: " + fuelConsumptionRateObdCommand.getFormattedResult());
+                Log.d(this.toString(), "IntakeManifoldPressure: " + intakeManifoldPressureObdCommand.getFormattedResult());
             }
         }
 
