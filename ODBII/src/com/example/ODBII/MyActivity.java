@@ -34,8 +34,12 @@ public class MyActivity extends Activity {
     private final float LOCATION_REFRESH_DISTANCE=1;
     private Activity myActivity;
     private BluetoothAdapter mBluetoothAdapter = null;
-    private final UUID MY_UUID= UUID.fromString("");
-    private final String ODBIIDeviceName="";
+    // Unique UUID for this application
+    private static final UUID MY_UUID_SECURE =
+            UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private static final UUID MY_UUID_INSECURE =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+    private final String ODBIIDeviceName="HTC Butterfly s";
     private String ODBIIMacAddress="";
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
@@ -100,6 +104,7 @@ public class MyActivity extends Activity {
         else {
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
             registerReceiver(mReceiver,filter);
+            mBluetoothAdapter.startDiscovery();
         }
         Olalist.setAdapter(mArrayAdapter);
         /*
@@ -115,7 +120,7 @@ public class MyActivity extends Activity {
         }).start();
 */
         //set one message to http post
-        SendHttpPost("speed:10,battery:50");
+        //SendHttpPost("speed:10,battery:50");
 
 
         //
@@ -198,7 +203,7 @@ public class MyActivity extends Activity {
             // Get a BluetoothSocket to connect with the given BluetoothDevice
             try {
                 // MY_UUID is the app's UUID string, also used by the server code
-                    tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                    tmp = device.createRfcommSocketToServiceRecord(MY_UUID_SECURE);
             } catch (IOException e) { }
             mmSocket = tmp;
         }
@@ -253,7 +258,7 @@ public class MyActivity extends Activity {
         }
 
         public void run() {
-            byte[] buffer = new byte[1024];  // buffer store for the stream
+            final byte[] buffer = new byte[1024];  // buffer store for the stream
             int bytes; // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs
@@ -264,7 +269,15 @@ public class MyActivity extends Activity {
                     // Send the obtained bytes to the UI activity
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                             //.sendToTarget();
-                    new String(buffer,"UTF-8");
+                   final String receive= new String(buffer,"UTF-8");
+                    myActivity.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            TextView myTextView = (TextView)findViewById(R.id.mytextview);
+                            myTextView.setText(receive);
+                        }
+                    });
                 } catch (IOException e) {
                     break;
                 }
