@@ -17,6 +17,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import pt.lighthouselabs.obd.commands.SpeedObdCommand;
+import pt.lighthouselabs.obd.commands.engine.EngineRPMObdCommand;
+import pt.lighthouselabs.obd.commands.engine.MassAirFlowObdCommand;
+import pt.lighthouselabs.obd.commands.engine.ThrottlePositionObdCommand;
+import pt.lighthouselabs.obd.commands.protocol.EchoOffObdCommand;
+import pt.lighthouselabs.obd.commands.protocol.LineFeedOffObdCommand;
+import pt.lighthouselabs.obd.commands.protocol.SelectProtocolObdCommand;
+import pt.lighthouselabs.obd.commands.protocol.TimeoutObdCommand;
+import pt.lighthouselabs.obd.commands.temperature.AmbientAirTemperatureObdCommand;
+import pt.lighthouselabs.obd.commands.temperature.EngineCoolantTemperatureObdCommand;
+import pt.lighthouselabs.obd.enums.ObdProtocols;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +40,8 @@ public class MyActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
+    private final int _timeoutObdCommand = 1000;
+    private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
     private Activity myActivity;
@@ -155,7 +167,7 @@ public class MyActivity extends Activity {
             }
         });
     }
-
+/*
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -190,6 +202,7 @@ public class MyActivity extends Activity {
 
         }
     };
+    */
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
@@ -255,6 +268,16 @@ public class MyActivity extends Activity {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            // execute commands
+            try {
+                new EchoOffObdCommand().run(socket.getInputStream(), socket.getOutputStream());
+                new LineFeedOffObdCommand().run(socket.getInputStream(), socket.getOutputStream());
+                new TimeoutObdCommand(_timeoutObdCommand).run(socket.getInputStream(), socket.getOutputStream());
+                new SelectProtocolObdCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
+                new AmbientAirTemperatureObdCommand().run(socket.getInputStream(), socket.getOutputStream());
+            } catch (Exception e) {
+                // handle errors
+            }
         }
 
         public void run() {
@@ -281,6 +304,32 @@ public class MyActivity extends Activity {
                 } catch (IOException e) {
                     break;
                 }
+            }
+
+            EngineRPMObdCommand engineRpmCommand = new EngineRPMObdCommand();
+            SpeedObdCommand speedCommand = new SpeedObdCommand();
+            ThrottlePositionObdCommand throttlePositionObdCommand = new ThrottlePositionObdCommand();
+            EngineCoolantTemperatureObdCommand engineCoolantTemperatureObdCommand = new EngineCoolantTemperatureObdCommand();
+            MassAirFlowObdCommand massAirFlowObdCommand = new MassAirFlowObdCommand();
+            while (!Thread.currentThread().isInterrupted())
+            {
+                try {
+                    engineRpmCommand.run(mmInStream, mmOutStream);
+                    speedCommand.run(mmInStream, mmOutStream);
+                    throttlePositionObdCommand.run(mmInStream,mmOutStream);
+                    engineCoolantTemperatureObdCommand.run(mmInStream,mmOutStream);
+                    massAirFlowObdCommand.run(mmInStream,mmOutStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // TODO handle commands result
+                Log.d(this.toString(), "RPM: " + engineRpmCommand.getFormattedResult());
+                Log.d(this.toString(), "Speed: " + speedCommand.getFormattedResult());
+                Log.d(this.toString(), "ThrottlePosition: " + throttlePositionObdCommand.getFormattedResult());
+                Log.d(this.toString(), "EngineCoolantTemperature: " + engineCoolantTemperatureObdCommand.getFormattedResult());
+                Log.d(this.toString(), "MassAirFlow: " + massAirFlowObdCommand.getFormattedResult());
             }
         }
 
