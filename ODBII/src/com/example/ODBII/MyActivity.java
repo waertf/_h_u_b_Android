@@ -31,6 +31,8 @@ public class MyActivity extends Activity {
     private Activity myActivity;
     private BluetoothAdapter mBluetoothAdapter = null;
     private final UUID MY_UUID= UUID.fromString("");
+    private final String ODBIIDeviceName="";
+    private String ODBIIMacAddress="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,15 @@ public class MyActivity extends Activity {
                 // Add the name and address to an array adapter to show in a ListView
                 mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 Log.d(this.toString(),"device:"+device.getName() + "\n" + device.getAddress());
+                if(ODBIIDeviceName.equalsIgnoreCase(device.getName())){
+                    //connect to device
+                    Thread connectThread = new ConnectThread(device);
+                    connectThread.start();
+                }
             }
+        }
+        else {
+            
         }
         Olalist.setAdapter(mArrayAdapter);
         /*
