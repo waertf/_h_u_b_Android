@@ -155,7 +155,7 @@ public class MyActivity extends Activity {
                 */
     }
 
-    private void SendHttpPost(String message) {
+    private String SendHttpPost(String message) {
         final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
         Thread SendHttpPost = new Thread(httpPost);
         SendHttpPost.start();
@@ -164,14 +164,16 @@ public class MyActivity extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
         myActivity.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
                 TextView myTextView = (TextView)findViewById(R.id.mytextview);
-                myTextView.setText(httpPost.getResult());
+                myTextView.setText(messageWithNewLineAndResult);
             }
         });
+        return messageWithNewLineAndResult;
     }
 /*
     private final LocationListener mLocationListener = new LocationListener() {
@@ -319,7 +321,7 @@ public class MyActivity extends Activity {
             MassAirFlowObdCommand massAirFlowObdCommand = new MassAirFlowObdCommand();
             TroubleCodesObdCommand troubleCodesObdCommand = new TroubleCodesObdCommand();
             EngineLoadObdCommand engineLoadObdCommand = new EngineLoadObdCommand();
-            ThrottlePositionObdCommand throttlePositionObdCommand1 = new ThrottlePositionObdCommand();
+            //ThrottlePositionObdCommand throttlePositionObdCommand1 = new ThrottlePositionObdCommand();
 
             FuelLevelObdCommand fuelLevelObdCommand = new FuelLevelObdCommand();
             FuelPressureObdCommand fuelPressureObdCommand = new FuelPressureObdCommand();
@@ -336,7 +338,7 @@ public class MyActivity extends Activity {
                     massAirFlowObdCommand.run(mmInStream,mmOutStream);
                     troubleCodesObdCommand.run(mmInStream,mmOutStream);
                     engineLoadObdCommand.run(mmInStream,mmOutStream);
-                    throttlePositionObdCommand1.run(mmInStream,mmOutStream);
+                    //throttlePositionObdCommand1.run(mmInStream,mmOutStream);
 
                     fuelLevelObdCommand.run(mmInStream,mmOutStream);
                     fuelPressureObdCommand.run(mmInStream,mmOutStream);
@@ -347,6 +349,38 @@ public class MyActivity extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                final String RPM,Speed,ThrottlePosition,EngineCoolantTemperature,
+                        MassAirFlow,TroubleCodes,EngineLoad,FuelLevel,
+                        FuelPressure,FuelConsumptionRate,IntakeManifoldPressure,
+                CombineWithComma,CombineWithNewLine;
+                RPM="RPM:" + engineRpmCommand.getFormattedResult();
+                Speed="Speed:" + speedCommand.getFormattedResult();
+                ThrottlePosition="ThrottlePosition:" + throttlePositionObdCommand.getFormattedResult();
+                EngineCoolantTemperature="EngineCoolantTemperature:" + engineCoolantTemperatureObdCommand.getFormattedResult();
+                MassAirFlow="MassAirFlow:" + massAirFlowObdCommand.getFormattedResult();
+                TroubleCodes="TroubleCodes:" + troubleCodesObdCommand.getFormattedResult();
+                EngineLoad="EngineLoad:" + engineLoadObdCommand.getFormattedResult();
+
+                FuelLevel="FuelLevel:" + fuelLevelObdCommand.getFormattedResult();
+                FuelPressure="FuelPressure:" + fuelPressureObdCommand.getFormattedResult();
+                FuelConsumptionRate="FuelConsumptionRate:" + fuelConsumptionRateObdCommand.getFormattedResult();
+                IntakeManifoldPressure="IntakeManifoldPressure:" + intakeManifoldPressureObdCommand.getFormattedResult();
+
+                CombineWithComma=RPM+","+
+                        Speed+","+
+                        ThrottlePosition+","+
+                        EngineCoolantTemperature+","+
+                        MassAirFlow+","+
+                        TroubleCodes+","+
+                        EngineLoad+","+
+                        FuelLevel+","+
+                        FuelPressure+","+
+                        FuelConsumptionRate+","+
+                        IntakeManifoldPressure+",";
+                //SendHttpPost(CombineWithComma);
+                //CombineWithNewLine=CombineWithComma.replaceAll(",","\n");
+                Log.d(this.toString(),SendHttpPost(CombineWithComma));
+                /*
                 // TODO handle commands result
                 Log.d(this.toString(), "RPM: " + engineRpmCommand.getFormattedResult());
                 Log.d(this.toString(), "Speed: " + speedCommand.getFormattedResult());
@@ -355,12 +389,23 @@ public class MyActivity extends Activity {
                 Log.d(this.toString(), "MassAirFlow: " + massAirFlowObdCommand.getFormattedResult());
                 Log.d(this.toString(), "TroubleCodes: " + troubleCodesObdCommand.getFormattedResult());
                 Log.d(this.toString(), "EngineLoad: " + engineLoadObdCommand.getFormattedResult());
-                Log.d(this.toString(), "ThrottlePosition: " + throttlePositionObdCommand1.getFormattedResult());
+                //Log.d(this.toString(), "ThrottlePosition: " + throttlePositionObdCommand1.getFormattedResult());
 
                 Log.d(this.toString(), "FuelLevel: " + fuelLevelObdCommand.getFormattedResult());
                 Log.d(this.toString(), "FuelPressure: " + fuelPressureObdCommand.getFormattedResult());
                 Log.d(this.toString(), "FuelConsumptionRate: " + fuelConsumptionRateObdCommand.getFormattedResult());
                 Log.d(this.toString(), "IntakeManifoldPressure: " + intakeManifoldPressureObdCommand.getFormattedResult());
+                */
+                /*
+                myActivity.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        TextView myTextView = (TextView)findViewById(R.id.mytextview);
+                        myTextView.setText(CombineWithNewLine);
+                    }
+                });
+                */
             }
         }
 
