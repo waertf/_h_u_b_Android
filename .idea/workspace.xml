@@ -65,9 +65,27 @@
       <file leaf-file-name="MyActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3317647" vertical-offset="1814" max-vertical-offset="6494">
-              <caret line="157" column="19" selection-start-line="157" selection-start-column="19" selection-end-line="157" selection-end-column="19" />
-              <folding />
+            <state vertical-scroll-proportion="0.33183858" vertical-offset="2623" max-vertical-offset="7429">
+              <caret line="163" column="29" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2819#3936#0" expanded="true" />
+                <element signature="e#3929#3930#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeviceListActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/DeviceListActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="368" max-vertical-offset="1445">
+              <caret line="119" column="4" selection-start-line="119" selection-start-column="4" selection-end-line="130" selection-end-column="5" />
+              <folding>
+                <element signature="method#onCreate#0;class#DeviceListActivity#0" expanded="false" />
+                <element signature="method#onDestroy#0;class#DeviceListActivity#0" expanded="false" />
+                <element signature="method#doDiscovery#0;class#DeviceListActivity#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -85,38 +103,8 @@
       <file leaf-file-name="JieHttpClient.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/JieHttpClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="1445">
-              <caret line="41" column="30" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BluetoothChat.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChat.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1445" max-vertical-offset="6205">
-              <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BluetoothChatService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChatService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="8483">
-              <caret line="52" column="64" selection-start-line="48" selection-start-column="4" selection-end-line="52" selection-end-column="64" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="44" max-vertical-offset="459">
-              <caret line="19" column="79" selection-start-line="16" selection-start-column="4" selection-end-line="19" selection-end-column="79" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="1445">
+              <caret line="52" column="32" selection-start-line="52" selection-start-column="32" selection-end-line="52" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -134,14 +122,14 @@
       </file>
       <file leaf-file-name="main.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.38" vertical-offset="0" max-vertical-offset="340">
+            <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="340">
               <caret line="7" column="38" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="38" />
               <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
@@ -182,7 +170,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1320" />
+    <option name="width" value="1382" />
     <option name="height" value="784" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -219,7 +207,50 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yourapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yourapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yourapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ODBII" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yourapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ODBII" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com.example.ODBII" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yourapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -272,50 +303,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yourapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yourapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yourapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ODBII" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yourapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ODBII" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com.example.ODBII" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yourapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -709,21 +697,21 @@
       <workItem from="1412040343060" duration="658000" />
       <workItem from="1412044641866" duration="1397000" />
       <workItem from="1412047567154" duration="51000" />
-      <workItem from="1412047782530" duration="2720000" />
+      <workItem from="1412047782530" duration="6974000" />
+      <workItem from="1412133466027" duration="1963000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118529000" />
+    <option name="totallyTimeSpent" value="124746000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1320" height="784" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.327454" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30177516" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -732,7 +720,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39792898" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23390895" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30177516" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -743,11 +731,12 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25996932" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24816984" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32692307" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.327454" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -790,13 +779,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>265</line>
+          <line>278</line>
           <properties />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>228</line>
+          <line>241</line>
           <properties />
           <option name="timeStamp" value="31" />
         </line-breakpoint>
@@ -820,13 +809,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>249</line>
+          <line>262</line>
           <properties />
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java</url>
-          <line>233</line>
+          <line>246</line>
           <properties />
           <option name="timeStamp" value="37" />
         </line-breakpoint>
@@ -848,13 +837,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="380">
           <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/example/yourapp/YourActivity.java">
@@ -888,13 +877,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="190" max-vertical-offset="380">
           <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/example/yourapp/YourActivity.java">
@@ -1110,20 +1099,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ODBII/res/layout/main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="408">
           <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/DeviceListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.04" vertical-offset="20" max-vertical-offset="2856">
-          <caret line="46" column="11" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="11" />
-        </state>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/example/yourapp/YourActivity.java">
@@ -1133,26 +1115,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChatService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="8483">
-          <caret line="52" column="64" selection-start-line="48" selection-start-column="4" selection-end-line="52" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
           <caret line="19" column="79" selection-start-line="16" selection-start-column="4" selection-end-line="19" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1445" max-vertical-offset="6205">
-          <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
           <folding />
         </state>
       </provider>
@@ -1193,14 +1159,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/JieHttpClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1156">
-          <caret line="41" column="30" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/HttpPostRequest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629">
@@ -1218,21 +1176,59 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="340">
+          <caret line="7" column="38" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
       <provider editor-type-id="android-designer">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChatService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.38" vertical-offset="0" max-vertical-offset="340">
-          <caret line="7" column="38" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="8483">
+          <caret line="52" column="64" selection-start-line="48" selection-start-column="4" selection-end-line="52" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/BluetoothChat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1445" max-vertical-offset="6205">
+          <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/JieHttpClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1156">
+          <caret line="52" column="32" selection-start-line="52" selection-start-column="32" selection-end-line="52" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/android-sdk/samples/android-11/BluetoothChat/src/com/example/android/BluetoothChat/DeviceListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="368" max-vertical-offset="1445">
+          <caret line="119" column="4" selection-start-line="119" selection-start-column="4" selection-end-line="130" selection-end-column="5" />
+          <folding>
+            <element signature="method#onCreate#0;class#DeviceListActivity#0" expanded="false" />
+            <element signature="method#onDestroy#0;class#DeviceListActivity#0" expanded="false" />
+            <element signature="method#doDiscovery#0;class#DeviceListActivity#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ODBII/src/com/example/ODBII/MyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3317647" vertical-offset="1814" max-vertical-offset="6494">
-          <caret line="157" column="19" selection-start-line="157" selection-start-column="19" selection-end-line="157" selection-end-column="19" />
-          <folding />
+        <state vertical-scroll-proportion="0.33183858" vertical-offset="2623" max-vertical-offset="7429">
+          <caret line="163" column="29" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2819#3936#0" expanded="true" />
+            <element signature="e#3929#3930#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -155,6 +155,19 @@ public class MyActivity extends Activity {
                 */
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Make sure we're not doing discovery anymore
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
+
+        // Unregister broadcast listeners
+        this.unregisterReceiver(mReceiver);
+    }
+
     private String SendHttpPost(String message) {
         final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
         Thread SendHttpPost = new Thread(httpPost);
