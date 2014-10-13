@@ -335,6 +335,31 @@ public class MyActivity extends Activity {
                                     switch (data[1])
                                     {
                                         case 78://Normal
+                                            int Fstatus = (intArray[2]);
+                                            StringBuffer FstatusSB= new StringBuffer();
+                                            if((1 & Fstatus) != 0) {
+                                                FstatusSB.append("Open loop due to insufficient engine temperature.");
+                                            } else if((2 & Fstatus) != 0) {
+                                                FstatusSB.append("Closed loop and using oxygen sensor feedback to determine fuel " +
+                                                        "mix.");
+                                            } else if((4 & Fstatus) != 0) {
+                                                FstatusSB.append("Open loop due to engine load OR fuel cut due to deacceleration.");
+                                            } else if((8 & Fstatus) != 0) {
+                                                FstatusSB.append("Open loop due to system failure.");
+                                            } else if((16 & Fstatus) != 0) {
+                                                FstatusSB.append("Closed loop and using at least one oxygen sensor but there is a fault" +
+                                                        " in the feedback system.");
+                                            }
+                                            double EngineLoading= (double)(100 * (intArray[3]) / 255);
+                                            int EngineTemperature = -40 + (intArray[4]);
+                                            int FuelPressure = 3 * (intArray[5]);
+                                            int IntakeManifoldPressure = (intArray[6]);
+                                            int Rpm = 256 * (intArray[7]) + (intArray[8]);
+                                            int Speed = (intArray[9]);
+                                            int IntakeAirTemperature = -40 + (intArray[10]);
+                                            int AirFlowRate = (intArray[11]);
+                                            double ThrottlePosition = (double)(100 * (intArray[12]) / 255);
+                                            double BatteryVoltag = (double)(intArray[13])/10;
                                             break;
                                         case 77://Malfunction
                                             break;
