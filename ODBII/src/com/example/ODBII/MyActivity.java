@@ -35,6 +35,7 @@ import pt.lighthouselabs.obd.commands.temperature.AmbientAirTemperatureObdComman
 import pt.lighthouselabs.obd.commands.temperature.EngineCoolantTemperatureObdCommand;
 import pt.lighthouselabs.obd.enums.ObdProtocols;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -308,12 +309,19 @@ public class MyActivity extends Activity {
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 try {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
+                    while ((bytes = mmInStream.read(buffer))!=-1)
+                    {
+                        baos.write(buffer, 0, bytes);
+                    }
+                    byte data [] = baos.toByteArray();
+                    baos.close();
+                    //bytes = mmInStream.read(buffer);
                     // Send the obtained bytes to the UI activity
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                             //.sendToTarget();
-                   final String receive= new String(buffer,"UTF-8");
+                   final String receive= new String(data,"UTF-8");
                     myActivity.runOnUiThread(new Runnable() {
 
                         @Override
