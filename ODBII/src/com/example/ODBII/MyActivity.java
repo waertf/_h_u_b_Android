@@ -290,7 +290,9 @@ public class MyActivity extends Activity {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            write("ats\r".getBytes());
             // execute commands
+            /*
             try {
                 new EchoOffObdCommand().run(socket.getInputStream(), socket.getOutputStream());
                 new LineFeedOffObdCommand().run(socket.getInputStream(), socket.getOutputStream());
@@ -300,6 +302,7 @@ public class MyActivity extends Activity {
             } catch (Exception e) {
                 // handle errors
             }
+            */
         }
 
         public void run() {
@@ -407,7 +410,7 @@ public class MyActivity extends Activity {
                     break;
                 }
             }
-
+            /*
             EngineRPMObdCommand engineRpmCommand = new EngineRPMObdCommand();
             SpeedObdCommand speedCommand = new SpeedObdCommand();
             ThrottlePositionObdCommand throttlePositionObdCommand = new ThrottlePositionObdCommand();
@@ -474,7 +477,7 @@ public class MyActivity extends Activity {
                 //SendHttpPost(CombineWithComma);
                 //CombineWithNewLine=CombineWithComma.replaceAll(",","\n");
                 Log.d(this.toString(),SendHttpPost(CombineWithComma));
-                /*
+                
                 // TODO handle commands result
                 Log.d(this.toString(), "RPM: " + engineRpmCommand.getFormattedResult());
                 Log.d(this.toString(), "Speed: " + speedCommand.getFormattedResult());
@@ -499,8 +502,9 @@ public class MyActivity extends Activity {
                         myTextView.setText(CombineWithNewLine);
                     }
                 });
-                */
+
             }
+            */
         }
 
         /* Call this from the main activity to send data to the remote device */
