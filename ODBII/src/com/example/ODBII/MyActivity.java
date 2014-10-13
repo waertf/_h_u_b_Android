@@ -316,12 +316,43 @@ public class MyActivity extends Activity {
                         baos.write(buffer, 0, bytes);
                     }
                     byte data [] = baos.toByteArray();
-                    StringBuilder sb = new StringBuilder();
+                    baos.close();
+                    int[] intArray = new int[data.length];
+                    String[] hexString = new String[data.length];
+                    //StringBuilder sb = new StringBuilder();
+                    for(int i=0;i<data.length;i++)
+                    {
+                        hexString[i]=(String.format("%02X", data[i]));
+                        intArray[i]=(int) data[i] & 0xff;
+                    }
+                    switch (data.length)
+                    {
+                        case 16://OBDII
+                            StringBuilder stringBuilder=new StringBuilder();
+                            switch (data[0])
+                            {
+                                case 64:
+                                    switch (data[1])
+                                    {
+                                        case 78://Normal
+                                            break;
+                                        case 77://Malfunction
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+
+                        case 12://TPMS
+                            break;
+                    }
+                    /*
                     for (byte b : data) {
                         sb.append(String.format("%02X ", b));
                     }
-                    String[] hexString=sb.toString().split(" ");
-                    baos.close();
+                    */
+                    //String[] hexString=sb.toString().split(" ");
+                    //baos.close();
                     //bytes = mmInStream.read(buffer);
                     // Send the obtained bytes to the UI activity
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
