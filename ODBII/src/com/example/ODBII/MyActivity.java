@@ -308,7 +308,7 @@ public class MyActivity extends Activity {
         public void run() {
             final byte[] buffer = new byte[1024];  // buffer store for the stream
             int bytes; // bytes returned from read()
-
+            StringBuilder stringBuilderHttpPost=new StringBuilder();
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 try {
@@ -328,7 +328,7 @@ public class MyActivity extends Activity {
                         hexString[i]=(String.format("%02X", data[i]));
                         intArray[i]=(int) data[i] & 0xff;
                     }
-                    StringBuilder stringBuilderHttpPost=new StringBuilder();
+                    //StringBuilder stringBuilderHttpPost=new StringBuilder();
                     switch (data.length)
                     {
                         case 16://OBDII
@@ -383,9 +383,45 @@ public class MyActivity extends Activity {
                             break;
 
                         case 12://TPMS
+                            switch (data[0])
+                            {
+                                case 84://T
+                                    switch (data[1])
+                                    {
+                                        case 80://P
+                                            switch (data[2])
+                                            {
+                                                case 86://V
+                                                    int Temperature,Pressure;
+                                                    double BatteryVoltage;
+                                                    Temperature=intArray[8]-50;
+                                                    Pressure=intArray[9];
+                                                    BatteryVoltage=intArray[10]/50;
+                                                    switch (data[3])
+                                                    {
+                                                        case 1://the sensor is assigned to Left Front tire.
+                                                            stringBuilderHttpPost.append("LFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            break;
+                                                        case 2://the sensor is assigned to Right Front tire.
+                                                            stringBuilderHttpPost.append("RFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            break;
+                                                        case 3://the sensor is assigned to Right Rear tire.
+                                                            stringBuilderHttpPost.append("RRT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            break;
+                                                        case 4://the sensor is assigned to Left Rear tire.
+                                                            stringBuilderHttpPost.append("LRT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            break;
+                                                    }
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
                             break;
                     }
                     Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                    stringBuilderHttpPost.setLength(0);
                     /*
                     for (byte b : data) {
                         sb.append(String.format("%02X ", b));
@@ -477,7 +513,7 @@ public class MyActivity extends Activity {
                 //SendHttpPost(CombineWithComma);
                 //CombineWithNewLine=CombineWithComma.replaceAll(",","\n");
                 Log.d(this.toString(),SendHttpPost(CombineWithComma));
-                
+
                 // TODO handle commands result
                 Log.d(this.toString(), "RPM: " + engineRpmCommand.getFormattedResult());
                 Log.d(this.toString(), "Speed: " + speedCommand.getFormattedResult());
