@@ -325,10 +325,10 @@ public class MyActivity extends Activity {
                         hexString[i]=(String.format("%02X", data[i]));
                         intArray[i]=(int) data[i] & 0xff;
                     }
+                    StringBuilder stringBuilderHttpPost=new StringBuilder();
                     switch (data.length)
                     {
                         case 16://OBDII
-                            StringBuilder stringBuilder=new StringBuilder();
                             switch (data[0])
                             {
                                 case 64:
@@ -360,6 +360,17 @@ public class MyActivity extends Activity {
                                             int AirFlowRate = (intArray[11]);
                                             double ThrottlePosition = (double)(100 * (intArray[12]) / 255);
                                             double BatteryVoltag = (double)(intArray[13])/10;
+                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");
+                                            stringBuilderHttpPost.append("EngineLoading:"+EngineLoading+",");
+                                            stringBuilderHttpPost.append("EngineTemperature:"+EngineTemperature+",");
+                                            stringBuilderHttpPost.append("FuelPressure:"+FuelPressure+",");
+                                            stringBuilderHttpPost.append("IntakeManifoldPressure:"+IntakeManifoldPressure+",");
+                                            stringBuilderHttpPost.append("Rpm:"+Rpm+",");
+                                            stringBuilderHttpPost.append("Speed:"+Speed+",");
+                                            stringBuilderHttpPost.append("IntakeAirTemperature:"+IntakeAirTemperature+",");
+                                            stringBuilderHttpPost.append("AirFlowRate:"+AirFlowRate+",");
+                                            stringBuilderHttpPost.append("ThrottlePosition:"+ThrottlePosition+",");
+                                            stringBuilderHttpPost.append("BatteryVoltag:"+BatteryVoltag+",");
                                             break;
                                         case 77://Malfunction
                                             break;
@@ -371,6 +382,7 @@ public class MyActivity extends Activity {
                         case 12://TPMS
                             break;
                     }
+                    Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                     /*
                     for (byte b : data) {
                         sb.append(String.format("%02X ", b));
