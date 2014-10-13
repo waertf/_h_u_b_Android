@@ -316,6 +316,11 @@ public class MyActivity extends Activity {
                         baos.write(buffer, 0, bytes);
                     }
                     byte data [] = baos.toByteArray();
+                    StringBuilder sb = new StringBuilder();
+                    for (byte b : data) {
+                        sb.append(String.format("%02X ", b));
+                    }
+                    String[] hexString=sb.toString().split(" ");
                     baos.close();
                     //bytes = mmInStream.read(buffer);
                     // Send the obtained bytes to the UI activity
