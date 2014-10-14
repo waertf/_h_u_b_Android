@@ -306,20 +306,53 @@ public class MyActivity extends Activity {
         }
 
         public void run() {
-            final byte[] buffer = new byte[1024];  // buffer store for the stream
+            byte[] buffer = null;  // buffer store for the stream
             int bytes; // bytes returned from read()
             StringBuilder stringBuilderHttpPost=new StringBuilder();
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    //ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Read from the InputStream
-                    while ((bytes = mmInStream.read(buffer))!=-1)
+                    int[] firstThree = new int[3];
+                    for(int i=0;i<firstThree.length;i++)
                     {
-                        baos.write(buffer, 0, bytes);
+                        if((firstThree[i]=mmInStream.read())!=-1)
+                        {
+
+                        }
                     }
-                    byte data [] = baos.toByteArray();
-                    baos.close();
+                    byte[] head = new byte[3];
+                    if((firstThree[0]==64 && firstThree[1]==78)||
+                            (firstThree[0]==64 && firstThree[1]==77))
+                    {
+                        buffer = new byte[17-firstThree.length];
+                        head[0]=(byte)firstThree[0];
+                        head[1]=(byte)firstThree[1];
+                        head[2]=(byte)firstThree[2];
+                    }
+                    else {
+                        if(firstThree[0] == 84 && firstThree[1] == 80 && firstThree[2] == 86)
+                        {
+                            buffer = new byte[13-firstThree.length];
+                            head[0]=(byte)firstThree[0];
+                            head[1]=(byte)firstThree[1];
+                            head[2]=(byte)firstThree[2];
+                        }
+                        else
+                            continue;
+                    }
+                    if ((bytes = mmInStream.read(buffer))!=-1)
+                    {
+                        //baos.write(buffer, 0, bytes);
+                    }
+                    else
+                        continue;
+                    //byte data [] = baos.toByteArray();
+                    //baos.close();
+                    byte data [] = new byte[head.length+buffer.length];
+                    System.arraycopy(head,0,data,0,head.length);
+                    System.arraycopy(buffer,0,data,head.length,buffer.length);
                     int[] intArray = new int[data.length];
                     String[] hexString = new String[data.length];
                     //StringBuilder sb = new StringBuilder();
