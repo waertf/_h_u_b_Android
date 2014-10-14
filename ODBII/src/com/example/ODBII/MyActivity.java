@@ -58,7 +58,7 @@ public class MyActivity extends Activity {
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final UUID MY_UUID_INSECURE =UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private final String ODBIIDeviceName="HTC Butterfly s";
+    private final String ODBIIDeviceName="OBD2 TPMS";
     private String ODBIIMacAddress="";
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
@@ -78,7 +78,8 @@ public class MyActivity extends Activity {
                 //我的方法是創建一個  LIST然後顯示出來 按下LIST之後進行連線
 
                 if(device.getName()!=null){
-                    if(ODBIIDeviceName.equalsIgnoreCase(device.getName())){
+                    Log.d("alonso1","device:"+device.getName() + "\n" + device.getAddress());
+                    if(device.getName().contains(ODBIIDeviceName)){
                         Thread connectThread = new ConnectThread(device);
                         connectThread.start();
                     }
@@ -112,8 +113,8 @@ public class MyActivity extends Activity {
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                Log.d(this.toString(),"device:"+device.getName() + "\n" + device.getAddress());
-                if(ODBIIDeviceName.equalsIgnoreCase(device.getName())){
+                Log.d("alonso2","device:"+device.getName() + "\n" + device.getAddress()+"\n"+ODBIIDeviceName.contains(device.getName()));
+                if(device.getName().contains(ODBIIDeviceName)){
                     //connect to device
                     Thread connectThread = new ConnectThread(device);
                     connectThread.start();
@@ -364,7 +365,7 @@ public class MyActivity extends Activity {
                     //StringBuilder stringBuilderHttpPost=new StringBuilder();
                     switch (data.length)
                     {
-                        case 16://OBDII
+                        case 17://OBDII
                             switch (data[0])
                             {
                                 case 64:
@@ -415,7 +416,7 @@ public class MyActivity extends Activity {
                             }
                             break;
 
-                        case 12://TPMS
+                        case 13://TPMS
                             switch (data[0])
                             {
                                 case 84://T
@@ -453,8 +454,9 @@ public class MyActivity extends Activity {
                             }
                             break;
                     }
-                    Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
-                    stringBuilderHttpPost.setLength(0);
+                    Log.d("alonso3",stringBuilderHttpPost.toString());
+                    //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                    //stringBuilderHttpPost.setLength(0);
                     /*
                     for (byte b : data) {
                         sb.append(String.format("%02X ", b));
@@ -466,7 +468,7 @@ public class MyActivity extends Activity {
                     // Send the obtained bytes to the UI activity
                     //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                             //.sendToTarget();
-                   final String receive= new String(data,"UTF-8");
+                   final String receive= new String(stringBuilderHttpPost.toString());
                     myActivity.runOnUiThread(new Runnable() {
 
                         @Override
@@ -475,6 +477,7 @@ public class MyActivity extends Activity {
                             myTextView.setText(receive);
                         }
                     });
+                    stringBuilderHttpPost.setLength(0);
                 } catch (IOException e) {
                     break;
                 }
