@@ -388,17 +388,17 @@ public class MyActivity extends Activity {
                                             int Fstatus = (intArray[2]);
                                             StringBuffer FstatusSB= new StringBuffer();
                                             if((1 & Fstatus) != 0) {
-                                                FstatusSB.append("Open loop due to insufficient engine temperature.");
+                                                FstatusSB.append("Open loop due to insufficient engine temperature#");
                                             } else if((2 & Fstatus) != 0) {
                                                 FstatusSB.append("Closed loop and using oxygen sensor feedback to determine fuel " +
-                                                        "mix.");
+                                                        "mix#");
                                             } else if((4 & Fstatus) != 0) {
-                                                FstatusSB.append("Open loop due to engine load OR fuel cut due to deacceleration.");
+                                                FstatusSB.append("Open loop due to engine load OR fuel cut due to deacceleration#");
                                             } else if((8 & Fstatus) != 0) {
-                                                FstatusSB.append("Open loop due to system failure.");
+                                                FstatusSB.append("Open loop due to system failure#");
                                             } else if((16 & Fstatus) != 0) {
                                                 FstatusSB.append("Closed loop and using at least one oxygen sensor but there is a fault" +
-                                                        " in the feedback system.");
+                                                        " in the feedback system#");
                                             }
                                             double EngineLoading= (double)(100 * (intArray[3]) / 255);
                                             int EngineTemperature = -40 + (intArray[4]);
@@ -410,7 +410,7 @@ public class MyActivity extends Activity {
                                             int AirFlowRate = (intArray[11]);
                                             double ThrottlePosition = (double)(100 * (intArray[12]) / 255);
                                             double BatteryVoltag = (double)(intArray[13])/10;
-                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");//燃油系統狀態 純文字用"."分隔
+                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");//燃油系統狀態 純文字用"#"分隔
                                             stringBuilderHttpPost.append("EngineLoading:"+EngineLoading+",");//引擎負荷 單位：%
                                             stringBuilderHttpPost.append("EngineTemperature:"+EngineTemperature+",");//引擎溫度 單位：°C
                                             stringBuilderHttpPost.append("FuelPressure:"+FuelPressure+",");//燃油壓力 單位：kPa
