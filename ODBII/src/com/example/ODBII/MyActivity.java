@@ -60,6 +60,7 @@ public class MyActivity extends Activity {
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final String ODBIIDeviceName="OBD2 TPMS";
     private String ODBIIMacAddress="";
+    Thread connectThread=null,connectedThread=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -80,7 +81,7 @@ public class MyActivity extends Activity {
                 if(device.getName()!=null){
                     Log.d("alonso1","device:"+device.getName() + "\n" + device.getAddress());
                     if(device.getName().contains(ODBIIDeviceName)){
-                        Thread connectThread = new ConnectThread(device);
+                        connectThread = new ConnectThread(device);
                         connectThread.start();
                     }
                 }
@@ -116,7 +117,7 @@ public class MyActivity extends Activity {
                 Log.d("alonso2","device:"+device.getName() + "\n" + device.getAddress()+"\n"+ODBIIDeviceName.contains(device.getName()));
                 if(device.getName().contains(ODBIIDeviceName)){
                     //connect to device
-                    Thread connectThread = new ConnectThread(device);
+                    connectThread = new ConnectThread(device);
                     connectThread.start();
                 }
             }
@@ -160,14 +161,24 @@ public class MyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            if(connectedThread!=null)
+                connectedThread.interrupt();
+            if(connectThread!=null)
+                connectThread.interrupt();
+            // Make sure we're not doing discovery anymore
+            if (mBluetoothAdapter != null) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
 
-        // Make sure we're not doing discovery anymore
-        if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.cancelDiscovery();
+            // Unregister broadcast listeners
+            this.unregisterReceiver(mReceiver);
+        }
+        catch (Exception e)
+        {
+            Log.d(this.toString(),e.toString());
         }
 
-        // Unregister broadcast listeners
-        this.unregisterReceiver(mReceiver);
     }
 
     private String SendHttpPost(String message) {
@@ -262,13 +273,15 @@ public class MyActivity extends Activity {
 
             // Do work to manage the connection (in a separate thread)
             //manageConnectedSocket(mmSocket);
-            new ConnectedThread(mmSocket).start();
+            connectedThread=new ConnectedThread(mmSocket);
+            connectedThread.start();
         }
 
         /** Will cancel an in-progress connection, and close the socket */
         public void cancel() {
             try {
                 mmSocket.close();
+                interrupt();
             } catch (IOException e) { }
         }
     }
@@ -311,7 +324,7 @@ public class MyActivity extends Activity {
             int bytes; // bytes returned from read()
             StringBuilder stringBuilderHttpPost=new StringBuilder();
             // Keep listening to the InputStream until an exception occurs
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Read from the InputStream
@@ -590,7 +603,9 @@ public class MyActivity extends Activity {
         public void cancel() {
             try {
                 mmSocket.close();
+
             } catch (IOException e) { }
         }
+
     }
 }
