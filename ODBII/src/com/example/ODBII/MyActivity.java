@@ -410,17 +410,17 @@ public class MyActivity extends Activity {
                                             int AirFlowRate = (intArray[11]);
                                             double ThrottlePosition = (double)(100 * (intArray[12]) / 255);
                                             double BatteryVoltag = (double)(intArray[13])/10;
-                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");
-                                            stringBuilderHttpPost.append("EngineLoading:"+EngineLoading+",");
-                                            stringBuilderHttpPost.append("EngineTemperature:"+EngineTemperature+",");
-                                            stringBuilderHttpPost.append("FuelPressure:"+FuelPressure+",");
-                                            stringBuilderHttpPost.append("IntakeManifoldPressure:"+IntakeManifoldPressure+",");
-                                            stringBuilderHttpPost.append("Rpm:"+Rpm+",");
-                                            stringBuilderHttpPost.append("Speed:"+Speed+",");
-                                            stringBuilderHttpPost.append("IntakeAirTemperature:"+IntakeAirTemperature+",");
-                                            stringBuilderHttpPost.append("AirFlowRate:"+AirFlowRate+",");
-                                            stringBuilderHttpPost.append("ThrottlePosition:"+ThrottlePosition+",");
-                                            stringBuilderHttpPost.append("BatteryVoltag:"+BatteryVoltag+",");
+                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");//燃油系統狀態 純文字用"."分隔
+                                            stringBuilderHttpPost.append("EngineLoading:"+EngineLoading+",");//引擎負荷 單位：%
+                                            stringBuilderHttpPost.append("EngineTemperature:"+EngineTemperature+",");//引擎溫度 單位：°C
+                                            stringBuilderHttpPost.append("FuelPressure:"+FuelPressure+",");//燃油壓力 單位：kPa
+                                            stringBuilderHttpPost.append("IntakeManifoldPressure:"+IntakeManifoldPressure+",");//進氣歧管壓力 單位：kPa
+                                            stringBuilderHttpPost.append("Rpm:"+Rpm+",");//引擎轉速 單位：rpm
+                                            stringBuilderHttpPost.append("Speed:"+Speed+",");//車輛速度 單位：km/h
+                                            stringBuilderHttpPost.append("IntakeAirTemperature:"+IntakeAirTemperature+",");//進氣溫度 單位：°C
+                                            stringBuilderHttpPost.append("AirFlowRate:"+AirFlowRate+",");//空氣流量 單位：g/s
+                                            stringBuilderHttpPost.append("ThrottlePosition:"+ThrottlePosition+",");//油門位置 單位：%
+                                            stringBuilderHttpPost.append("BatteryVoltag:"+BatteryVoltag+",");//電池電壓 單位：V
                                             break;
                                         case 77://Malfunction
                                             break;
@@ -447,7 +447,7 @@ public class MyActivity extends Activity {
                                                     switch (data[3])
                                                     {
                                                         case 1://the sensor is assigned to Left Front tire.
-                                                            stringBuilderHttpPost.append("LFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            stringBuilderHttpPost.append("LFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
                                                             break;
                                                         case 2://the sensor is assigned to Right Front tire.
                                                             stringBuilderHttpPost.append("RFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
