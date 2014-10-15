@@ -62,6 +62,8 @@ public class MyActivity extends Activity {
     private String ODBIIMacAddress="";
     Thread connectThread=null,connectedThread=null;
     BluetoothSocket BTSocket=null;
+    Boolean normalClose=null;
+    Boolean isConnected=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -164,7 +166,7 @@ public class MyActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-
+            normalClose=true;
             if(connectedThread!=null) {
                 connectedThread.interrupt();
                 connectedThread=null;
@@ -256,6 +258,9 @@ public class MyActivity extends Activity {
             // because mmSocket is final
             BluetoothSocket tmp = null;
             mmDevice = device;
+            //synchronized (MyActivity.this) {
+                isConnected = false;
+            //}
 
             // Get a BluetoothSocket to connect with the given BluetoothDevice
             try {
@@ -266,27 +271,33 @@ public class MyActivity extends Activity {
             mmSocket = tmp;
         }
 
-        public void run() {
+        public synchronized void run() {
             // Cancel discovery because it will slow down the connection
             mBluetoothAdapter.cancelDiscovery();
 
-            try {
-                // Connect the device through the socket. This will block
-                // until it succeeds or throws an exception
-                mmSocket.connect();
-            } catch (IOException connectException) {
-                // Unable to connect; close the socket and get out
                 try {
-                    mmSocket.close();
-                } catch (IOException closeException) { }
-                return;
-            }
+                    // Connect the device through the socket. This will block
+                    // until it succeeds or throws an exception
+                    mmSocket.connect();
+                    //synchronized (MyActivity.this) {
+                        isConnected = true;
+                    //}
+                } catch (IOException connectException) {
+                    // Unable to connect; close the socket and get out
+                    Log.d("mmSocket.connect()", connectException.toString());
+                    try {
+                        mmSocket.close();
+                    } catch (IOException closeException) {
+                        Log.d("mmSocket.close()", closeException.toString());
+                    }
+                    return;
+                }
 
             // Do work to manage the connection (in a separate thread)
             //manageConnectedSocket(mmSocket);
-            synchronized (this) {
+            //synchronized (this) {
                 connectThread = null;
-            }
+            //}
 
             connectedThread=new ConnectedThread(mmSocket);
             connectedThread.start();
@@ -507,11 +518,48 @@ public class MyActivity extends Activity {
                     });
                     stringBuilderHttpPost.setLength(0);
                 } catch (Exception e) {
+                    normalClose=isConnected=false;
                     Log.d("ConnectedThread111",e.toString());
                     cancel();
+                    //while (!isConnected) {
+                        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+// If there are paired devices
+                        //ListView Olalist = (ListView) this.findViewById(R.id.listview1);
+                        //ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1);
+                        if (pairedDevices.size() > 0) {
+                            // Loop through paired devices
+                            for (BluetoothDevice device : pairedDevices) {
+                                // Add the name and address to an array adapter to show in a ListView
+                                //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                                Log.d("alonso2", "device:" + device.getName() + "\n" + device.getAddress() + "\n" + ODBIIDeviceName.contains(device.getName()));
+                                if (device.getName().contains(ODBIIDeviceName)) {
+                                    //connect to device
+                                    while (!isConnected) {
+                                        connectThread = new ConnectThread(device);
+                                        connectThread.start();
+                                        try {
+                                            sleep(1000);
+                                        } catch (InterruptedException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                    break;
+
+                                }
+                            }
+                        } else {
+                            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
+                            registerReceiver(mReceiver, filter);
+                            mBluetoothAdapter.startDiscovery();
+                        }
+                    //}
+                    //Olalist.setAdapter(mArrayAdapter);
+                    //cancel();
                     break;
                 }
             }
+            while (normalClose==null);
+            if(normalClose==true)
             cancel();
             /*
             EngineRPMObdCommand engineRpmCommand = new EngineRPMObdCommand();
