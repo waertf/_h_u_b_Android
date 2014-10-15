@@ -61,6 +61,7 @@ public class MyActivity extends Activity {
     private final String ODBIIDeviceName="OBD2 TPMS";
     private String ODBIIMacAddress="";
     Thread connectThread=null,connectedThread=null;
+    BluetoothSocket BTSocket=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -119,6 +120,7 @@ public class MyActivity extends Activity {
                     //connect to device
                     connectThread = new ConnectThread(device);
                     connectThread.start();
+                    break;
                 }
             }
         }
@@ -162,15 +164,23 @@ public class MyActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if(connectedThread!=null)
+
+            if(connectedThread!=null) {
                 connectedThread.interrupt();
-            if(connectThread!=null)
+                connectedThread=null;
+            }
+            if(connectThread!=null) {
                 connectThread.interrupt();
+                connectThread=null;
+            }
             // Make sure we're not doing discovery anymore
             if (mBluetoothAdapter != null) {
                 mBluetoothAdapter.cancelDiscovery();
             }
-
+            while (!connectedThread.isInterrupted());
+            if(BTSocket!=null)
+                BTSocket.close();
+            BTSocket=null;
             // Unregister broadcast listeners
             this.unregisterReceiver(mReceiver);
         }
@@ -237,7 +247,7 @@ public class MyActivity extends Activity {
         }
     };
     */
-    private class ConnectThread extends Thread {
+    public class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
 
@@ -274,6 +284,10 @@ public class MyActivity extends Activity {
 
             // Do work to manage the connection (in a separate thread)
             //manageConnectedSocket(mmSocket);
+            synchronized (this) {
+                connectThread = null;
+            }
+
             connectedThread=new ConnectedThread(mmSocket);
             connectedThread.start();
         }
@@ -286,13 +300,13 @@ public class MyActivity extends Activity {
             } catch (IOException e) { }
         }
     }
-    private class ConnectedThread extends Thread {
+    public class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
+            mmSocket = BTSocket=socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
@@ -492,10 +506,13 @@ public class MyActivity extends Activity {
                         }
                     });
                     stringBuilderHttpPost.setLength(0);
-                } catch (IOException e) {
+                } catch (Exception e) {
+                    Log.d("ConnectedThread111",e.toString());
+                    cancel();
                     break;
                 }
             }
+            cancel();
             /*
             EngineRPMObdCommand engineRpmCommand = new EngineRPMObdCommand();
             SpeedObdCommand speedCommand = new SpeedObdCommand();
@@ -604,7 +621,7 @@ public class MyActivity extends Activity {
         public void cancel() {
             try {
                 mmSocket.close();
-
+                interrupt();
             } catch (IOException e) { }
         }
 
