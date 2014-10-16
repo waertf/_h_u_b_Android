@@ -315,6 +315,7 @@ public class MyActivity extends Activity {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        private final double ODB2SendDelayTime=15*1000;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = BTSocket=socket;
@@ -350,6 +351,7 @@ public class MyActivity extends Activity {
             int bytes; // bytes returned from read()
             StringBuilder stringBuilderHttpPost=new StringBuilder();
             // Keep listening to the InputStream until an exception occurs
+            double ODB2startTime=0;
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -402,6 +404,8 @@ public class MyActivity extends Activity {
                         intArray[i]=(int) data[i] & 0xff;
                     }
                     //StringBuilder stringBuilderHttpPost=new StringBuilder();
+                    if(ODB2startTime==0)
+                        ODB2startTime=System.currentTimeMillis();
                     switch (data.length)
                     {
                         case 17://OBDII
@@ -411,6 +415,11 @@ public class MyActivity extends Activity {
                                     switch (data[1])
                                     {
                                         case 78://Normal
+                                            if(System.currentTimeMillis()-ODB2startTime>ODB2SendDelayTime) {
+                                                ODB2startTime=0;
+                                            }
+                                            else
+                                                break;
                                             int Fstatus = (intArray[2]);
                                             StringBuffer FstatusSB= new StringBuffer();
                                             if((1 & Fstatus) != 0) {
@@ -493,6 +502,7 @@ public class MyActivity extends Activity {
                             }
                             break;
                     }
+                    if(stringBuilderHttpPost.length()>0)
                     Log.d("alonso3",stringBuilderHttpPost.toString());
                     //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                     //stringBuilderHttpPost.setLength(0);
