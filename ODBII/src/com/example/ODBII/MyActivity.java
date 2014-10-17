@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -64,6 +65,7 @@ public class MyActivity extends Activity {
     BluetoothSocket BTSocket=null;
     Boolean normalClose=null;
     Boolean isConnected=null;
+    Context context=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -96,6 +98,7 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         myActivity=this;
+        context = getApplicationContext();
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -281,12 +284,14 @@ public class MyActivity extends Activity {
                     mmSocket.connect();
                     //synchronized (MyActivity.this) {
                         isConnected = true;
+                    sendToast("Connected");
                     //}
                 } catch (IOException connectException) {
                     // Unable to connect; close the socket and get out
                     Log.d("mmSocket.connect()", connectException.toString());
                     try {
                         mmSocket.close();
+                        sendToast("Connect lost");
                     } catch (IOException closeException) {
                         Log.d("mmSocket.close()", closeException.toString());
                     }
@@ -307,6 +312,7 @@ public class MyActivity extends Activity {
         public void cancel() {
             try {
                 mmSocket.close();
+                sendToast("Connect lost");
                 interrupt();
             } catch (IOException e) { }
         }
@@ -357,85 +363,72 @@ public class MyActivity extends Activity {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Read from the InputStream
                     int[] firstThree = new int[3];
-                    for(int i=0;i<firstThree.length;i++)
-                    {
-                        if((firstThree[i]=mmInStream.read())!=-1)
-                        {
+                    for (int i = 0; i < firstThree.length; i++) {
+                        if ((firstThree[i] = mmInStream.read()) != -1) {
 
                         }
                     }
                     byte[] head = new byte[3];
-                    if((firstThree[0]==64 && firstThree[1]==78)||
-                            (firstThree[0]==64 && firstThree[1]==77))
-                    {
-                        buffer = new byte[17-firstThree.length];
-                        head[0]=(byte)firstThree[0];
-                        head[1]=(byte)firstThree[1];
-                        head[2]=(byte)firstThree[2];
-                    }
-                    else {
-                        if(firstThree[0] == 84 && firstThree[1] == 80 && firstThree[2] == 86)
-                        {
-                            buffer = new byte[13-firstThree.length];
-                            head[0]=(byte)firstThree[0];
-                            head[1]=(byte)firstThree[1];
-                            head[2]=(byte)firstThree[2];
-                        }
-                        else
+                    if ((firstThree[0] == 64 && firstThree[1] == 78) ||
+                            (firstThree[0] == 64 && firstThree[1] == 77)) {
+                        buffer = new byte[17 - firstThree.length];
+                        head[0] = (byte) firstThree[0];
+                        head[1] = (byte) firstThree[1];
+                        head[2] = (byte) firstThree[2];
+                    } else {
+                        if (firstThree[0] == 84 && firstThree[1] == 80 && firstThree[2] == 86) {
+                            buffer = new byte[13 - firstThree.length];
+                            head[0] = (byte) firstThree[0];
+                            head[1] = (byte) firstThree[1];
+                            head[2] = (byte) firstThree[2];
+                        } else
                             continue;
                     }
-                    if ((bytes = mmInStream.read(buffer))!=-1)
-                    {
+                    if ((bytes = mmInStream.read(buffer)) != -1) {
                         //baos.write(buffer, 0, bytes);
-                    }
-                    else
+                    } else
                         continue;
                     //byte data [] = baos.toByteArray();
                     //baos.close();
-                    byte data [] = new byte[head.length+buffer.length];
-                    System.arraycopy(head,0,data,0,head.length);
-                    System.arraycopy(buffer,0,data,head.length,buffer.length);
+                    byte data[] = new byte[head.length + buffer.length];
+                    System.arraycopy(head, 0, data, 0, head.length);
+                    System.arraycopy(buffer, 0, data, head.length, buffer.length);
                     int[] intArray = new int[data.length];
                     String[] hexString = new String[data.length];
                     //StringBuilder sb = new StringBuilder();
-                    for(int i=0;i<data.length;i++)
-                    {
-                        hexString[i]=(String.format("%02X", data[i]));
-                        intArray[i]=(int) data[i] & 0xff;
+                    for (int i = 0; i < data.length; i++) {
+                        hexString[i] = (String.format("%02X", data[i]));
+                        intArray[i] = (int) data[i] & 0xff;
                     }
                     //StringBuilder stringBuilderHttpPost=new StringBuilder();
-                    if(ODB2startTime==0)
-                        ODB2startTime=System.currentTimeMillis();
-                    switch (data.length)
-                    {
+                    if (ODB2startTime == 0)
+                        ODB2startTime = System.currentTimeMillis();
+                    switch (data.length) {
                         case 17://OBDII
-                            switch (data[0])
-                            {
+                            switch (data[0]) {
                                 case 64:
-                                    switch (data[1])
-                                    {
+                                    switch (data[1]) {
                                         case 78://Normal
-                                            if(System.currentTimeMillis()-ODB2startTime>ODB2SendDelayTime) {
-                                                ODB2startTime=0;
-                                            }
-                                            else
+                                            if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
+                                                ODB2startTime = 0;
+                                            } else
                                                 break;
                                             int Fstatus = (intArray[2]);
-                                            StringBuffer FstatusSB= new StringBuffer();
-                                            if((1 & Fstatus) != 0) {
+                                            StringBuffer FstatusSB = new StringBuffer();
+                                            if ((1 & Fstatus) != 0) {
                                                 FstatusSB.append("Open loop due to insufficient engine temperature#");
-                                            } else if((2 & Fstatus) != 0) {
+                                            } else if ((2 & Fstatus) != 0) {
                                                 FstatusSB.append("Closed loop and using oxygen sensor feedback to determine fuel " +
                                                         "mix#");
-                                            } else if((4 & Fstatus) != 0) {
+                                            } else if ((4 & Fstatus) != 0) {
                                                 FstatusSB.append("Open loop due to engine load OR fuel cut due to deacceleration#");
-                                            } else if((8 & Fstatus) != 0) {
+                                            } else if ((8 & Fstatus) != 0) {
                                                 FstatusSB.append("Open loop due to system failure#");
-                                            } else if((16 & Fstatus) != 0) {
+                                            } else if ((16 & Fstatus) != 0) {
                                                 FstatusSB.append("Closed loop and using at least one oxygen sensor but there is a fault" +
                                                         " in the feedback system#");
                                             }
-                                            double EngineLoading= (double)(100 * (intArray[3]) / 255);
+                                            double EngineLoading = (double) (100 * (intArray[3]) / 255);
                                             int EngineTemperature = -40 + (intArray[4]);
                                             int FuelPressure = 3 * (intArray[5]);
                                             int IntakeManifoldPressure = (intArray[6]);
@@ -443,19 +436,19 @@ public class MyActivity extends Activity {
                                             int Speed = (intArray[9]);
                                             int IntakeAirTemperature = -40 + (intArray[10]);
                                             int AirFlowRate = (intArray[11]);
-                                            double ThrottlePosition = (double)(100 * (intArray[12]) / 255);
-                                            double BatteryVoltag = (double)(intArray[13])/10;
-                                            stringBuilderHttpPost.append("FuelSystemStatus:"+FstatusSB.toString()+",");//燃油系統狀態 純文字用"#"分隔
-                                            stringBuilderHttpPost.append("EngineLoading:"+EngineLoading+",");//引擎負荷 單位：%
-                                            stringBuilderHttpPost.append("EngineTemperature:"+EngineTemperature+",");//引擎溫度 單位：°C
-                                            stringBuilderHttpPost.append("FuelPressure:"+FuelPressure+",");//燃油壓力 單位：kPa
-                                            stringBuilderHttpPost.append("IntakeManifoldPressure:"+IntakeManifoldPressure+",");//進氣歧管壓力 單位：kPa
-                                            stringBuilderHttpPost.append("Rpm:"+Rpm+",");//引擎轉速 單位：rpm
-                                            stringBuilderHttpPost.append("Speed:"+Speed+",");//車輛速度 單位：km/h
-                                            stringBuilderHttpPost.append("IntakeAirTemperature:"+IntakeAirTemperature+",");//進氣溫度 單位：°C
-                                            stringBuilderHttpPost.append("AirFlowRate:"+AirFlowRate+",");//空氣流量 單位：g/s
-                                            stringBuilderHttpPost.append("ThrottlePosition:"+ThrottlePosition+",");//油門位置 單位：%
-                                            stringBuilderHttpPost.append("BatteryVoltag:"+BatteryVoltag+",");//電池電壓 單位：V
+                                            double ThrottlePosition = (double) (100 * (intArray[12]) / 255);
+                                            double BatteryVoltag = (double) (intArray[13]) / 10;
+                                            stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
+                                            stringBuilderHttpPost.append("EngineLoading:" + EngineLoading + ",");//引擎負荷 單位：%
+                                            stringBuilderHttpPost.append("EngineTemperature:" + EngineTemperature + ",");//引擎溫度 單位：°C
+                                            stringBuilderHttpPost.append("FuelPressure:" + FuelPressure + ",");//燃油壓力 單位：kPa
+                                            stringBuilderHttpPost.append("IntakeManifoldPressure:" + IntakeManifoldPressure + ",");//進氣歧管壓力 單位：kPa
+                                            stringBuilderHttpPost.append("Rpm:" + Rpm + ",");//引擎轉速 單位：rpm
+                                            stringBuilderHttpPost.append("Speed:" + Speed + ",");//車輛速度 單位：km/h
+                                            stringBuilderHttpPost.append("IntakeAirTemperature:" + IntakeAirTemperature + ",");//進氣溫度 單位：°C
+                                            stringBuilderHttpPost.append("AirFlowRate:" + AirFlowRate + ",");//空氣流量 單位：g/s
+                                            stringBuilderHttpPost.append("ThrottlePosition:" + ThrottlePosition + ",");//油門位置 單位：%
+                                            stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
                                             break;
                                         case 77://Malfunction
                                             break;
@@ -465,33 +458,29 @@ public class MyActivity extends Activity {
                             break;
 
                         case 13://TPMS
-                            switch (data[0])
-                            {
+                            switch (data[0]) {
                                 case 84://T
-                                    switch (data[1])
-                                    {
+                                    switch (data[1]) {
                                         case 80://P
-                                            switch (data[2])
-                                            {
+                                            switch (data[2]) {
                                                 case 86://V
-                                                    int Temperature,Pressure;
+                                                    int Temperature, Pressure;
                                                     double BatteryVoltage;
-                                                    Temperature=intArray[8]-50;
-                                                    Pressure=intArray[9];
-                                                    BatteryVoltage=intArray[10]/50;
-                                                    switch (data[3])
-                                                    {
+                                                    Temperature = intArray[8] - 50;
+                                                    Pressure = intArray[9];
+                                                    BatteryVoltage = intArray[10] / 50;
+                                                    switch (data[3]) {
                                                         case 1://the sensor is assigned to Left Front tire.
-                                                            stringBuilderHttpPost.append("LFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
+                                                            stringBuilderHttpPost.append("LFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
                                                             break;
                                                         case 2://the sensor is assigned to Right Front tire.
-                                                            stringBuilderHttpPost.append("RFT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            stringBuilderHttpPost.append("RFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
                                                             break;
                                                         case 3://the sensor is assigned to Right Rear tire.
-                                                            stringBuilderHttpPost.append("RRT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            stringBuilderHttpPost.append("RRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
                                                             break;
                                                         case 4://the sensor is assigned to Left Rear tire.
-                                                            stringBuilderHttpPost.append("LRT:"+Temperature+"-"+Pressure+"-"+BatteryVoltage+",");
+                                                            stringBuilderHttpPost.append("LRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
                                                             break;
                                                     }
                                                     break;
@@ -502,31 +491,33 @@ public class MyActivity extends Activity {
                             }
                             break;
                     }
-                    if(stringBuilderHttpPost.length()>0)
-                    Log.d("alonso3",stringBuilderHttpPost.toString());
-                    //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
-                    //stringBuilderHttpPost.setLength(0);
-                    /*
-                    for (byte b : data) {
-                        sb.append(String.format("%02X ", b));
-                    }
-                    */
-                    //String[] hexString=sb.toString().split(" ");
-                    //baos.close();
-                    //bytes = mmInStream.read(buffer);
-                    // Send the obtained bytes to the UI activity
-                    //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
-                            //.sendToTarget();
-                   final String receive= new String(stringBuilderHttpPost.toString());
-                    myActivity.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            TextView myTextView = (TextView)findViewById(R.id.mytextview);
-                            myTextView.setText(receive);
+                    if (stringBuilderHttpPost.length() > 0)
+                    {
+                        Log.d("alonso3", stringBuilderHttpPost.toString());
+                        //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                        //stringBuilderHttpPost.setLength(0);
+                        /*
+                        for (byte b : data) {
+                            sb.append(String.format("%02X ", b));
                         }
-                    });
-                    stringBuilderHttpPost.setLength(0);
+                        */
+                        //String[] hexString=sb.toString().split(" ");
+                        //baos.close();
+                        //bytes = mmInStream.read(buffer);
+                        // Send the obtained bytes to the UI activity
+                        //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+                        //.sendToTarget();
+                        final String receive = new String(stringBuilderHttpPost.toString());
+                        myActivity.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                TextView myTextView = (TextView) findViewById(R.id.mytextview);
+                                myTextView.setText(receive);
+                            }
+                        });
+                        stringBuilderHttpPost.setLength(0);
+                    }
                 } catch (Exception e) {
                     normalClose=isConnected=false;
                     Log.d("ConnectedThread111",e.toString());
@@ -679,9 +670,18 @@ public class MyActivity extends Activity {
         public void cancel() {
             try {
                 mmSocket.close();
+                sendToast("Connect lost");
                 interrupt();
             } catch (IOException e) { }
         }
 
+    }
+    public void sendToast(final CharSequence text )
+    {
+        myActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(myActivity, text, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
