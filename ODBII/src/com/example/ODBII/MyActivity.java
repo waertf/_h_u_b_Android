@@ -359,6 +359,10 @@ public class MyActivity extends Activity {
             byte[] buffer = null;  // buffer store for the stream
             int bytes; // bytes returned from read()
             StringBuilder stringBuilderHttpPost=new StringBuilder();
+            int Fstatus, EngineTemperature = 0,FuelPressure = 0,IntakeManifoldPressure = 0,Rpm = 0,Speed = 0,IntakeAirTemperature = 0,AirFlowRate = 0;
+            StringBuffer FstatusSB = null;
+            double EngineLoading = 0,ThrottlePosition = 0,BatteryVoltag = 0;
+            String DTC = null,LFT= null,RFT= null,LRT= null,RRT= null;
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
             while (!Thread.currentThread().isInterrupted()) {
@@ -413,12 +417,14 @@ public class MyActivity extends Activity {
                                 case 64:
                                     switch (data[1]) {
                                         case 78://Normal
+                                            /*
                                             if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
                                                 ODB2startTime = 0;
                                             } else
                                                 break;
-                                            int Fstatus = (intArray[2]);
-                                            StringBuffer FstatusSB = new StringBuffer();
+                                                */
+                                            Fstatus = (intArray[2]);
+                                            FstatusSB = new StringBuffer();
                                             if ((1 & Fstatus) != 0) {
                                                 FstatusSB.append("Open loop due to insufficient engine temperature#");
                                             } else if ((2 & Fstatus) != 0) {
@@ -432,16 +438,17 @@ public class MyActivity extends Activity {
                                                 FstatusSB.append("Closed loop and using at least one oxygen sensor but there is a fault" +
                                                         " in the feedback system#");
                                             }
-                                            double EngineLoading = (double) (100 * (intArray[3]) / 255);
-                                            int EngineTemperature = -40 + (intArray[4]);
-                                            int FuelPressure = 3 * (intArray[5]);
-                                            int IntakeManifoldPressure = (intArray[6]);
-                                            int Rpm = 256 * (intArray[7]) + (intArray[8]);
-                                            int Speed = (intArray[9]);
-                                            int IntakeAirTemperature = -40 + (intArray[10]);
-                                            int AirFlowRate = (intArray[11]);
-                                            double ThrottlePosition = (double) (100 * (intArray[12]) / 255);
-                                            double BatteryVoltag = (double) (intArray[13]) / 10;
+                                             EngineLoading = (double) (100 * (intArray[3]) / 255);
+                                             EngineTemperature = -40 + (intArray[4]);
+                                             FuelPressure = 3 * (intArray[5]);
+                                             IntakeManifoldPressure = (intArray[6]);
+                                             Rpm = 256 * (intArray[7]) + (intArray[8]);
+                                             Speed = (intArray[9]);
+                                             IntakeAirTemperature = -40 + (intArray[10]);
+                                             AirFlowRate = (intArray[11]);
+                                             ThrottlePosition = (double) (100 * (intArray[12]) / 255);
+                                             BatteryVoltag = (double) (intArray[13]) / 10;
+                                            /*
                                             stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                             stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
                                             stringBuilderHttpPost.append("EngineLoading:" + EngineLoading + ",");//引擎負荷 單位：%
@@ -454,11 +461,13 @@ public class MyActivity extends Activity {
                                             stringBuilderHttpPost.append("AirFlowRate:" + AirFlowRate + ",");//空氣流量 單位：g/s
                                             stringBuilderHttpPost.append("ThrottlePosition:" + ThrottlePosition + ",");//油門位置 單位：%
                                             stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
+                                            */
                                             break;
                                         case 77://Malfunction
                                             byte[] error = new byte[10];
                                             for(int i=0;i<10;i++)
                                                 error[i]=data[i+2];
+                                            StringBuffer stringBuffer=new StringBuffer();
                                             for(int i=0;i<10;i+=2)
                                             {
                                                 byte first,second;
@@ -474,11 +483,13 @@ public class MyActivity extends Activity {
                                                         header = "DTC" + (i / 2 + 1) + ":U";
                                                     else
                                                         header = "DTC" + (i / 2 + 1) + ":B";
-                                                    stringBuilderHttpPost.append(header +
-                                                            toHexChar(15 & (first & 63) >> 4) + toHexChar(first & 15) + toHexChar(15 & second >> 4) + toHexChar(second & 15) + ",");
+                                                stringBuffer.append(header +
+                                                        toHexChar(15 & (first & 63) >> 4) + toHexChar(first & 15) + toHexChar(15 & second >> 4) + toHexChar(second & 15) + ",");
+                                                    //stringBuilderHttpPost.append(DTC);
                                                 }
                                             }
-                                            stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
+                                            DTC=stringBuffer.toString();
+                                            //stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                             break;
                                     }
                                     break;
@@ -499,19 +510,23 @@ public class MyActivity extends Activity {
                                                     BatteryVoltage = intArray[10] / 50;
                                                     switch (data[3]) {
                                                         case 1://the sensor is assigned to Left Front tire.
-                                                            stringBuilderHttpPost.append("LFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
+                                                            LFT="LFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",";
+                                                            //stringBuilderHttpPost.append(LFT);//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
                                                             break;
                                                         case 2://the sensor is assigned to Right Front tire.
-                                                            stringBuilderHttpPost.append("RFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
+                                                            RFT="RFT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",";
+                                                            //stringBuilderHttpPost.append(RFT);
                                                             break;
                                                         case 3://the sensor is assigned to Right Rear tire.
-                                                            stringBuilderHttpPost.append("RRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
+                                                            RRT="RRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",";
+                                                            //stringBuilderHttpPost.append(RRT);
                                                             break;
                                                         case 4://the sensor is assigned to Left Rear tire.
-                                                            stringBuilderHttpPost.append("LRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
+                                                            LRT="LRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",";
+                                                            //stringBuilderHttpPost.append(LRT);
                                                             break;
                                                     }
-                                                    stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
+                                                    //stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                                     break;
                                             }
                                             break;
@@ -520,6 +535,32 @@ public class MyActivity extends Activity {
                             }
                             break;
                     }
+                    if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
+                        ODB2startTime = 0;
+                        stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
+                        stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
+                        stringBuilderHttpPost.append("EngineLoading:" + EngineLoading + ",");//引擎負荷 單位：%
+                        stringBuilderHttpPost.append("EngineTemperature:" + EngineTemperature + ",");//引擎溫度 單位：°C
+                        stringBuilderHttpPost.append("FuelPressure:" + FuelPressure + ",");//燃油壓力 單位：kPa
+                        stringBuilderHttpPost.append("IntakeManifoldPressure:" + IntakeManifoldPressure + ",");//進氣歧管壓力 單位：kPa
+                        stringBuilderHttpPost.append("Rpm:" + Rpm + ",");//引擎轉速 單位：rpm
+                        stringBuilderHttpPost.append("Speed:" + Speed + ",");//車輛速度 單位：km/h
+                        stringBuilderHttpPost.append("IntakeAirTemperature:" + IntakeAirTemperature + ",");//進氣溫度 單位：°C
+                        stringBuilderHttpPost.append("AirFlowRate:" + AirFlowRate + ",");//空氣流量 單位：g/s
+                        stringBuilderHttpPost.append("ThrottlePosition:" + ThrottlePosition + ",");//油門位置 單位：%
+                        stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
+                        stringBuilderHttpPost.append(DTC);
+                        DTC=null;
+                        if(LFT!=null)
+                        stringBuilderHttpPost.append(LFT);//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
+                        if(RFT!=null)
+                        stringBuilderHttpPost.append(RFT);
+                        if(RRT!=null)
+                        stringBuilderHttpPost.append(RRT);
+                        if(LRT!=null)
+                        stringBuilderHttpPost.append(LRT);
+                    }
+
                     if (stringBuilderHttpPost.length() > 0)
                     {
                         Log.d("alonso3", stringBuilderHttpPost.toString());
