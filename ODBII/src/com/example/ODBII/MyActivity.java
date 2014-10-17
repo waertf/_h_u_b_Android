@@ -60,6 +60,7 @@ public class MyActivity extends Activity {
     private static final UUID MY_UUID_INSECURE =UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final String ODBIIDeviceName="OBD2 TPMS";
+    String GetBT6000sBTName=null;
     private String ODBIIMacAddress="";
     Thread connectThread=null,connectedThread=null;
     BluetoothSocket BTSocket=null;
@@ -86,6 +87,7 @@ public class MyActivity extends Activity {
                 if(device.getName()!=null){
                     Log.d("alonso1","device:"+device.getName() + "\n" + device.getAddress());
                     if(device.getName().contains(ODBIIDeviceName)){
+                        GetBT6000sBTName=device.getName();
                         connectThread = new ConnectThread(device);
                         connectThread.start();
                     }
@@ -120,8 +122,9 @@ public class MyActivity extends Activity {
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                Log.d("alonso2","device:"+device.getName() + "\n" + device.getAddress()+"\n"+ODBIIDeviceName.contains(device.getName()));
+                Log.d("alonso2","device:"+device.getName() + "\t" + device.getAddress()+"\t"+device.getName().contains(ODBIIDeviceName));
                 if(device.getName().contains(ODBIIDeviceName)){
+                    GetBT6000sBTName=device.getName();
                     //connect to device
                     connectThread = new ConnectThread(device);
                     connectThread.start();
@@ -403,6 +406,7 @@ public class MyActivity extends Activity {
                     //StringBuilder stringBuilderHttpPost=new StringBuilder();
                     if (ODB2startTime == 0)
                         ODB2startTime = System.currentTimeMillis();
+
                     switch (data.length) {
                         case 17://OBDII
                             switch (data[0]) {
@@ -438,6 +442,7 @@ public class MyActivity extends Activity {
                                             int AirFlowRate = (intArray[11]);
                                             double ThrottlePosition = (double) (100 * (intArray[12]) / 255);
                                             double BatteryVoltag = (double) (intArray[13]) / 10;
+                                            stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                             stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
                                             stringBuilderHttpPost.append("EngineLoading:" + EngineLoading + ",");//引擎負荷 單位：%
                                             stringBuilderHttpPost.append("EngineTemperature:" + EngineTemperature + ",");//引擎溫度 單位：°C
@@ -460,7 +465,7 @@ public class MyActivity extends Activity {
                                                 String header;
                                                 first=error[i];
                                                 second=error[i+1];
-                                                if(first+second!=0) {
+                                                /*if(first+second!=0)*/ {
                                                     if (first >> 6 == 0)
                                                         header = "DTC" + (i / 2 + 1) + ":P";
                                                     else if (first >> 6 == 1)
@@ -473,7 +478,7 @@ public class MyActivity extends Activity {
                                                             toHexChar(15 & (first & 63) >> 4) + toHexChar(first & 15) + toHexChar(15 & second >> 4) + toHexChar(second & 15) + ",");
                                                 }
                                             }
-
+                                            stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                             break;
                                     }
                                     break;
@@ -506,6 +511,7 @@ public class MyActivity extends Activity {
                                                             stringBuilderHttpPost.append("LRT:" + Temperature + "-" + Pressure + "-" + BatteryVoltage + ",");
                                                             break;
                                                     }
+                                                    stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                                     break;
                                             }
                                             break;
