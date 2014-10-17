@@ -451,6 +451,29 @@ public class MyActivity extends Activity {
                                             stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
                                             break;
                                         case 77://Malfunction
+                                            byte[] error = new byte[10];
+                                            for(int i=0;i<10;i++)
+                                                error[i]=data[i+2];
+                                            for(int i=0;i<10;i+=2)
+                                            {
+                                                byte first,second;
+                                                String header;
+                                                first=error[i];
+                                                second=error[i+1];
+                                                if(first+second!=0) {
+                                                    if (first >> 6 == 0)
+                                                        header = "DTC" + (i / 2 + 1) + ":P";
+                                                    else if (first >> 6 == 1)
+                                                        header = "DTC" + (i / 2 + 1) + ":C";
+                                                    else if (first >> 6 == -1)
+                                                        header = "DTC" + (i / 2 + 1) + ":U";
+                                                    else
+                                                        header = "DTC" + (i / 2 + 1) + ":B";
+                                                    stringBuilderHttpPost.append(header +
+                                                            toHexChar(15 & (first & 63) >> 4) + toHexChar(first & 15) + toHexChar(15 & second >> 4) + toHexChar(second & 15) + ",");
+                                                }
+                                            }
+
                                             break;
                                     }
                                     break;
@@ -658,7 +681,9 @@ public class MyActivity extends Activity {
             }
             */
         }
-
+        public  char toHexChar(int input) {
+            return input >= 0 && input <= 9?(char)(input + 48):(char)(65 + (input - 10));
+        }
         /* Call this from the main activity to send data to the remote device */
         public void write(byte[] bytes) {
             try {
