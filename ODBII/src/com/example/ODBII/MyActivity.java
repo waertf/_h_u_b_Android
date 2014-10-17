@@ -564,7 +564,7 @@ public class MyActivity extends Activity {
                     if (stringBuilderHttpPost.length() > 0)
                     {
                         Log.d("alonso3", stringBuilderHttpPost.toString());
-                        //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                        Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                         //stringBuilderHttpPost.setLength(0);
                         /*
                         for (byte b : data) {
