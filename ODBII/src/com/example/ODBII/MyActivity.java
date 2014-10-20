@@ -61,8 +61,9 @@ public class MyActivity extends Activity {
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final String ODBIIDeviceName="OBD2 TPMS";
     String GetBT6000sBTName=null;
+    final String FuelLevelInputCmd="012F\r";
     private String ODBIIMacAddress="";
-    Thread connectThread=null,connectedThread=null;
+    Thread connectThread=null,connectedThread=null,sendFuelLevelInputCmd=null;
     BluetoothSocket BTSocket=null;
     Boolean normalClose=null;
     Boolean isConnected=null;
@@ -180,6 +181,11 @@ public class MyActivity extends Activity {
             if(connectThread!=null) {
                 connectThread.interrupt();
                 connectThread=null;
+            }
+            if(sendFuelLevelInputCmd!=null)
+            {
+                sendFuelLevelInputCmd.interrupt();
+                sendFuelLevelInputCmd=null;
             }
             // Make sure we're not doing discovery anymore
             if (mBluetoothAdapter != null) {
@@ -340,7 +346,9 @@ public class MyActivity extends Activity {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            write("ats\r".getBytes());
+            sendFuelLevelInputCmd = new SendFuelLevelInputCmd(mmOutStream);
+            sendFuelLevelInputCmd.start();
+            //write("ats\r".getBytes());
             // execute commands
             /*
             try {
@@ -365,7 +373,7 @@ public class MyActivity extends Activity {
             String DTC = null,LFT= null,RFT= null,LRT= null,RRT= null;
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
-            String FuelLevelInputCmd="012F\r";
+
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -580,7 +588,7 @@ public class MyActivity extends Activity {
                     if (stringBuilderHttpPost.length() > 0)
                     {
                         Log.d("alonso3", stringBuilderHttpPost.toString());
-                        Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                        //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                         //stringBuilderHttpPost.setLength(0);
                         /*
                         for (byte b : data) {
@@ -643,6 +651,11 @@ public class MyActivity extends Activity {
                     //Olalist.setAdapter(mArrayAdapter);
                     //cancel();
                     break;
+                }
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
             while (normalClose==null);
@@ -771,5 +784,36 @@ public class MyActivity extends Activity {
                 Toast.makeText(myActivity, text, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public class SendFuelLevelInputCmd extends Thread{
+        private final OutputStream mmOutStream;
+
+        SendFuelLevelInputCmd(OutputStream outStrem){
+            mmOutStream=outStrem;
+        }
+        public void run() {
+            while (!Thread.currentThread().isInterrupted())
+            {
+                write(FuelLevelInputCmd.getBytes());
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                write("ats\r".getBytes());
+                try {
+                    sleep(60*1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        /* Call this from the main activity to send data to the remote device */
+        public void write(byte[] bytes) {
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) {
+            }
+        }
     }
 }
