@@ -361,10 +361,11 @@ public class MyActivity extends Activity {
             StringBuilder stringBuilderHttpPost=new StringBuilder();
             int Fstatus, EngineTemperature = 0,FuelPressure = 0,IntakeManifoldPressure = 0,Rpm = 0,Speed = 0,IntakeAirTemperature = 0,AirFlowRate = 0;
             StringBuffer FstatusSB = null;
-            double EngineLoading = 0,ThrottlePosition = 0,BatteryVoltag = 0;
+            double EngineLoading = 0,ThrottlePosition = 0,BatteryVoltag = 0,FuelLevelInput=0;
             String DTC = null,LFT= null,RFT= null,LRT= null,RRT= null;
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
+            String FuelLevelInputCmd="012F\r";
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -389,8 +390,19 @@ public class MyActivity extends Activity {
                             head[1] = (byte) firstThree[1];
                             head[2] = (byte) firstThree[2];
                         } else
-                            continue;
+                        {
+                            if(firstThree[0]==65 && firstThree[1]==47)
+                            {
+                                buffer = new byte[3 - firstThree.length];
+                                head[0] = (byte) firstThree[0];
+                                head[1] = (byte) firstThree[1];
+                                head[2] = (byte) firstThree[2];
+                            }
+                            else
+                                continue;
+                        }
                     }
+                    if(buffer.length>0)
                     if ((bytes = mmInStream.read(buffer)) != -1) {
                         //baos.write(buffer, 0, bytes);
                     } else
@@ -534,6 +546,9 @@ public class MyActivity extends Activity {
                                     break;
                             }
                             break;
+                        case 3://Fuel Level Input
+                            FuelLevelInput=intArray[2]*100/255;
+                            break;
                     }
                     if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
                         ODB2startTime = 0;
@@ -559,6 +574,7 @@ public class MyActivity extends Activity {
                         stringBuilderHttpPost.append(RRT);
                         if(LRT!=null)
                         stringBuilderHttpPost.append(LRT);
+                        stringBuilderHttpPost.append("FuelLevelInput:"+FuelLevelInput+",");
                     }
 
                     if (stringBuilderHttpPost.length() > 0)
