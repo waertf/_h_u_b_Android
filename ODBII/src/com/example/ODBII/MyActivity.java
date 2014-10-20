@@ -399,9 +399,9 @@ public class MyActivity extends Activity {
                             head[2] = (byte) firstThree[2];
                         } else
                         {
-                            if(firstThree[0]==65 && firstThree[1]==47)
+                            if(firstThree[0]==0x34 && firstThree[1]==0x31)
                             {
-                                buffer = new byte[3 - firstThree.length];
+                                buffer = new byte[11 - firstThree.length];
                                 head[0] = (byte) firstThree[0];
                                 head[1] = (byte) firstThree[1];
                                 head[2] = (byte) firstThree[2];
@@ -554,8 +554,13 @@ public class MyActivity extends Activity {
                                     break;
                             }
                             break;
-                        case 3://Fuel Level Input
-                            FuelLevelInput=intArray[2]*100/255;
+                        case 11://Fuel Level Input
+                            if(data[0]==0x34 && data[1]==0x31 && data[3]==0x32 &&data[4]==0x46)
+                            {
+                                //Log.d("data[6]-'0'", String.valueOf((data[6]-'0')));
+                                //Log.d("data[7]-'0'", String.valueOf((data[7]-'0')));
+                                FuelLevelInput = ((data[6]-'0')*16+(data[7]-'0')) * 100 / 255;
+                            }
                             break;
                     }
                     if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
