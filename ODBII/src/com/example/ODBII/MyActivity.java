@@ -637,10 +637,14 @@ public class MyActivity extends Activity {
                                     while (!isConnected) {
                                         connectThread = new ConnectThread(device);
                                         connectThread.start();
-                                        try {
-                                            sleep(1000);
-                                        } catch (InterruptedException e1) {
-                                            e1.printStackTrace();
+                                        try
+                                        {
+                                            Thread.sleep(1000);
+                                        }
+                                        catch (InterruptedException ex)
+                                        {
+                                            Thread.currentThread().interrupt(); // restore interrupted status
+                                            break;
                                         }
                                     }
                                     break;
@@ -657,10 +661,14 @@ public class MyActivity extends Activity {
                     //cancel();
                     break;
                 }
-                try {
-                    sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                try
+                {
+                    Thread.sleep(10);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt(); // restore interrupted status
+                    break;
                 }
             }
             while (normalClose==null);
@@ -800,16 +808,24 @@ public class MyActivity extends Activity {
             while (!Thread.currentThread().isInterrupted())
             {
                 write(FuelLevelInputCmd.getBytes());
-                try {
-                    sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                try
+                {
+                    Thread.sleep(10);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt(); // restore interrupted status
+                    break;
                 }
                 write("ats\r".getBytes());
-                try {
-                    sleep(60*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                try
+                {
+                    Thread.sleep(60*1000);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt(); // restore interrupted status
+                    break;
                 }
             }
         }
