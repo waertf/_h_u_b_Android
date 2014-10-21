@@ -350,7 +350,7 @@ public class MyActivity extends Activity {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private final double ODB2SendDelayTime=1*1000;
+        private final double ODB2SendDelayTime=15*1000;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = BTSocket=socket;
