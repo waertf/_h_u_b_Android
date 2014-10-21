@@ -508,7 +508,10 @@ public class MyActivity extends Activity {
                                                     //stringBuilderHttpPost.append(DTC);
                                                 }
                                             }
-                                            DTC=stringBuffer.toString();
+                                            if(DTC!=null && stringBuffer.length()>0)
+                                                DTC=stringBuffer.toString();
+                                            else
+                                                DTC="DTC1:P0000,DTC2:P0000,DTC3:P0000,DTC4:P0000,DTC5:P0000,";
                                             //stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                                             break;
                                     }
@@ -579,7 +582,7 @@ public class MyActivity extends Activity {
                         stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
                         if(DTC!=null)
                         stringBuilderHttpPost.append(DTC);
-                        DTC=null;
+                        //DTC=null;
                         if(LFT!=null)
                         stringBuilderHttpPost.append(LFT);//胎溫 單位：°C 胎壓 單位：Psi 電池電壓 單位：V
                         if(RFT!=null)
