@@ -577,6 +577,7 @@ public class MyActivity extends Activity {
                         stringBuilderHttpPost.append("AirFlowRate:" + AirFlowRate + ",");//空氣流量 單位：g/s
                         stringBuilderHttpPost.append("ThrottlePosition:" + ThrottlePosition + ",");//油門位置 單位：%
                         stringBuilderHttpPost.append("BatteryVoltag:" + BatteryVoltag + ",");//電池電壓 單位：V
+                        if(DTC!=null)
                         stringBuilderHttpPost.append(DTC);
                         DTC=null;
                         if(LFT!=null)
@@ -606,7 +607,7 @@ public class MyActivity extends Activity {
                         // Send the obtained bytes to the UI activity
                         //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                         //.sendToTarget();
-                        final String receive = new String(stringBuilderHttpPost.toString());
+                        final String receive = new String(stringBuilderHttpPost.toString()).replace(",","\n");
                         myActivity.runOnUiThread(new Runnable() {
 
                             @Override
@@ -631,7 +632,7 @@ public class MyActivity extends Activity {
                             for (BluetoothDevice device : pairedDevices) {
                                 // Add the name and address to an array adapter to show in a ListView
                                 //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                                Log.d("alonso2", "device:" + device.getName() + "\n" + device.getAddress() + "\n" + ODBIIDeviceName.contains(device.getName()));
+                                Log.d("alonso2", "device:" + device.getName() + "\n" + device.getAddress() + "\n" + device.getName().contains(ODBIIDeviceName));
                                 if (device.getName().contains(ODBIIDeviceName)) {
                                     //connect to device
                                     while (!isConnected) {
