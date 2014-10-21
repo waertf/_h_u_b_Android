@@ -350,7 +350,7 @@ public class MyActivity extends Activity {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private final double ODB2SendDelayTime=15*1000;
+        private double ODB2SendDelayTime=0;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = BTSocket=socket;
@@ -587,6 +587,7 @@ public class MyActivity extends Activity {
                             break;
                     }
                     if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
+                        ODB2SendDelayTime=15*1000;
                         ODB2startTime = 0;
                         stringBuilderHttpPost.append("ID:"+GetBT6000sBTName+",");
                         stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
