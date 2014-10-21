@@ -118,7 +118,7 @@ public class MyActivity extends Activity {
 // If there are paired devices
         ListView Olalist = (ListView) this.findViewById(R.id.listview1);
         ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1);
-        if (pairedDevices.size() > 0) {
+        if (pairedDevices.size() > 0&& false) {
             // Loop through paired devices
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
