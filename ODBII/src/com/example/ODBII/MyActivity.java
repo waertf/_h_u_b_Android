@@ -138,7 +138,7 @@ public class MyActivity extends Activity {
             registerReceiver(mReceiver,filter);
             mBluetoothAdapter.startDiscovery();
         }
-        Olalist.setAdapter(mArrayAdapter);
+        //Olalist.setAdapter(mArrayAdapter);
         /*
         new Thread(new Runnable() {
             public void run() {
