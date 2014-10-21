@@ -134,9 +134,11 @@ public class MyActivity extends Activity {
             }
         }
         else {
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
-            registerReceiver(mReceiver,filter);
-            mBluetoothAdapter.startDiscovery();
+            //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
+            //registerReceiver(mReceiver,filter);
+            //mBluetoothAdapter.startDiscovery();
+            Intent serverIntent = new Intent(this, DeviceListActivity.class);
+            startActivityForResult(serverIntent, 2);
         }
         Olalist.setAdapter(mArrayAdapter);
         /*
@@ -169,6 +171,24 @@ public class MyActivity extends Activity {
                 */
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            // Get the device MAC address
+            String address = data.getExtras()
+                    .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+            // Get the BluetoothDevice object
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+            // Attempt to connect to the device
+            if(device.getName()!=null){
+                Log.d("alonso1","device:"+device.getName() + "\n" + device.getAddress());
+                if(device.getName().contains(ODBIIDeviceName)){
+                    GetBT6000sBTName=device.getName();
+                    connectThread = new ConnectThread(device);
+                    connectThread.start();
+                }
+            }
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -196,7 +216,7 @@ public class MyActivity extends Activity {
                 BTSocket.close();
             BTSocket=null;
             // Unregister broadcast listeners
-            this.unregisterReceiver(mReceiver);
+            //this.unregisterReceiver(mReceiver);
         }
         catch (Exception e)
         {
@@ -330,7 +350,7 @@ public class MyActivity extends Activity {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private final double ODB2SendDelayTime=15*1000;
+        private final double ODB2SendDelayTime=1*1000;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = BTSocket=socket;
@@ -656,15 +676,18 @@ public class MyActivity extends Activity {
                                 }
                             }
                         } else {
-                            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
-                            registerReceiver(mReceiver, filter);
-                            mBluetoothAdapter.startDiscovery();
+                            //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
+                            //registerReceiver(mReceiver, filter);
+                            //mBluetoothAdapter.startDiscovery();
+                            Intent serverIntent = new Intent(myActivity, DeviceListActivity.class);
+                            startActivityForResult(serverIntent, 2);
                         }
                     //}
                     //Olalist.setAdapter(mArrayAdapter);
                     //cancel();
                     break;
                 }
+                /*
                 try
                 {
                     Thread.sleep(10);
@@ -674,6 +697,7 @@ public class MyActivity extends Activity {
                     Thread.currentThread().interrupt(); // restore interrupted status
                     break;
                 }
+                */
             }
             while (normalClose==null);
             if(normalClose==true)
