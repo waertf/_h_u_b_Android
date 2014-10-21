@@ -5,14 +5,22 @@
               android:layout_height="fill_parent"
         >
     <TextView
+            android:id="@+id/connectStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#FFFFFF00"
+            />
+    <TextView
             android:id="@+id/mytextview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World, MyActivity"
+            android:text=""
             />
     <ListView android:id="@+id/listview1"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:visibility="invisible"
             />
 </LinearLayout>
 
