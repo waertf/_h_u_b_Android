@@ -138,7 +138,7 @@ public class MyActivity extends Activity {
             registerReceiver(mReceiver,filter);
             mBluetoothAdapter.startDiscovery();
         }
-        //Olalist.setAdapter(mArrayAdapter);
+        Olalist.setAdapter(mArrayAdapter);
         /*
         new Thread(new Runnable() {
             public void run() {
@@ -795,7 +795,9 @@ public class MyActivity extends Activity {
     {
         myActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(myActivity, text, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(myActivity, text, Toast.LENGTH_SHORT).show();
+                TextView myTextView = (TextView)findViewById(R.id.connectStatus);
+                myTextView.setText(text);
             }
         });
     }
