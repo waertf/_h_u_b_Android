@@ -58,6 +58,7 @@ public class BluetoothChatService {
     String GetBT6000sBTName=null;
     final String FuelLevelInputCmd="012F\r";
     Thread sendFuelLevelInputCmd=null;
+    private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
     /**
      * Constructor. Prepares a new BluetoothChat session.
      * @param context  The UI Activity Context
@@ -686,7 +687,7 @@ public class BluetoothChatService {
 
                     if (stringBuilderHttpPost.length() > 0) {
                         Log.d("alonso3", stringBuilderHttpPost.toString());
-                        //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                        Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                         //stringBuilderHttpPost.setLength(0);
                         /*
                         for (byte b : data) {
@@ -751,6 +752,18 @@ public class BluetoothChatService {
         }
         public  char toHexChar(int input) {
             return input >= 0 && input <= 9?(char)(input + 48):(char)(65 + (input - 10));
+        }
+        private String SendHttpPost(String message) {
+            final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
+            Thread SendHttpPost = new Thread(httpPost);
+            SendHttpPost.start();
+            try {
+                SendHttpPost.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
+            return messageWithNewLineAndResult;
         }
     }
     public class SendFuelLevelInputCmd extends Thread{
