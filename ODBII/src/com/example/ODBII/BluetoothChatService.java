@@ -645,7 +645,9 @@ public class BluetoothChatService {
                             }
                             break;
                     }
-                    if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime) {
+                    if(FstatusSB==null)
+                        continue;
+                    if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime && data.length>0) {
                         ODB2SendDelayTime = 15 * 1000;
                         ODB2startTime = 0;
                         stringBuilderHttpPost.append("ID:" + GetBT6000sBTName + ",");
@@ -672,6 +674,8 @@ public class BluetoothChatService {
                         if (LRT != null)
                             stringBuilderHttpPost.append(LRT);
                         stringBuilderHttpPost.append("FuelLevelInput:" + FuelLevelInput + ",");
+                        FstatusSB=null;
+                        DTC=LFT=RFT=LRT=RRT=null;
                     }
 
                     if (stringBuilderHttpPost.length() > 0) {
