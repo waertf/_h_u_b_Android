@@ -278,7 +278,7 @@ public class MyActivity extends Activity {
                 mBluetoothAdapter.cancelDiscovery();
             }
             if (mChatService != null) mChatService.stop();
-            while (!connectedThread.isInterrupted());
+            //while (!connectedThread.isInterrupted());
             if(BTSocket!=null)
                 BTSocket.close();
             BTSocket=null;
