@@ -199,6 +199,11 @@ public class BluetoothChatService {
             mInsecureAcceptThread.cancel();
             mInsecureAcceptThread = null;
         }
+        if(sendFuelLevelInputCmd!=null)
+        {
+            sendFuelLevelInputCmd.interrupt();
+            sendFuelLevelInputCmd=null;
+        }
         setState(STATE_NONE);
     }
 
@@ -446,7 +451,7 @@ public class BluetoothChatService {
             StringBuilder stringBuilderHttpPost=new StringBuilder();
             int Fstatus, EngineTemperature = 0,FuelPressure = 0,IntakeManifoldPressure = 0,Rpm = 0,Speed = 0,IntakeAirTemperature = 0,AirFlowRate = 0;
             StringBuffer FstatusSB = null;
-            double EngineLoading = 0,ThrottlePosition = 0,BatteryVoltag = 0,FuelLevelInput=0;
+            double EngineLoading = 0,ThrottlePosition = 0,BatteryVoltag = 0,FuelLevelInput=-1;
             String DTC = null,LFT= null,RFT= null,LRT= null,RRT= null;
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
@@ -674,6 +679,7 @@ public class BluetoothChatService {
                         if (LRT != null)
                             stringBuilderHttpPost.append(LRT);
                         stringBuilderHttpPost.append("FuelLevelInput:" + FuelLevelInput + ",");
+                        FuelLevelInput=-1;
                         FstatusSB=null;
                         DTC=LFT=RFT=LRT=RRT=null;
                     }
@@ -759,23 +765,25 @@ public class BluetoothChatService {
                 write(FuelLevelInputCmd.getBytes());
                 try
                 {
-                    Thread.sleep(10);
+                    Thread.sleep(1000);
                 }
                 catch (InterruptedException e)
                 {
                     Thread.currentThread().interrupt(); // restore interrupted status
                     break;
                 }
+
                 write("ats\r".getBytes());
                 try
                 {
-                    Thread.sleep(60*1000);
+                    Thread.sleep(10*1000);
                 }
                 catch (InterruptedException e)
                 {
                     Thread.currentThread().interrupt(); // restore interrupted status
                     break;
                 }
+
             }
         }
         /* Call this from the main activity to send data to the remote device */
