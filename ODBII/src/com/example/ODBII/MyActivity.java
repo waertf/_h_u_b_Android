@@ -1,5 +1,6 @@
 package com.example.ODBII;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,7 +13,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -54,6 +57,7 @@ public class MyActivity extends Activity {
     private final float LOCATION_REFRESH_DISTANCE=1;
     private Activity myActivity;
     private BluetoothAdapter mBluetoothAdapter = null;
+    BluetoothDevice device=null;
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE =UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -68,6 +72,26 @@ public class MyActivity extends Activity {
     Boolean normalClose=null;
     Boolean isConnected=null;
     Context context=null;
+    // Message types sent from the BluetoothChatService Handler
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int MESSAGE_TOAST = 5;
+
+    // Key names received from the BluetoothChatService Handler
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
+
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
+    private static final int REQUEST_ENABLE_BT = 3;
+    private BluetoothChatService mChatService = null;
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
+    // Array adapter for the conversation thread
+    private ArrayAdapter<String> mConversationArrayAdapter;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -96,6 +120,60 @@ public class MyActivity extends Activity {
             }
         }
     };
+    // The Handler that gets information back from the BluetoothChatService
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    Log.i(this.toString(), "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    switch (msg.arg1) {
+                        case BluetoothChatService.STATE_CONNECTED:
+                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            mConversationArrayAdapter.clear();
+                            break;
+                        case BluetoothChatService.STATE_CONNECTING:
+                            setStatus(R.string.title_connecting);
+                            break;
+                        case BluetoothChatService.STATE_LISTEN:
+                        case BluetoothChatService.STATE_NONE:
+                            setStatus(R.string.title_not_connected);
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    String writeMessage = new String(writeBuf);
+                    mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    break;
+                case MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    final String readMessage = new String(readBuf, 0, msg.arg1);
+                    mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                    myActivity.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            TextView myTextView = (TextView) findViewById(R.id.mytextview);
+                            myTextView.setText(readMessage);
+                        }
+                    });
+                    break;
+                case MESSAGE_DEVICE_NAME:
+                    // save the connected device's name
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(), "Connected to "
+                            + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +182,8 @@ public class MyActivity extends Activity {
         context = getApplicationContext();
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
+        mChatService = new BluetoothChatService(this, mHandler);
+        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -138,7 +217,7 @@ public class MyActivity extends Activity {
             //registerReceiver(mReceiver,filter);
             //mBluetoothAdapter.startDiscovery();
             Intent serverIntent = new Intent(this, DeviceListActivity.class);
-            startActivityForResult(serverIntent, 2);
+            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
         }
         Olalist.setAdapter(mArrayAdapter);
         /*
@@ -173,20 +252,7 @@ public class MyActivity extends Activity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            // Get the device MAC address
-            String address = data.getExtras()
-                    .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-            // Get the BluetoothDevice object
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-            // Attempt to connect to the device
-            if(device.getName()!=null){
-                Log.d("alonso1","device:"+device.getName() + "\n" + device.getAddress());
-                if(device.getName().contains(ODBIIDeviceName)){
-                    GetBT6000sBTName=device.getName();
-                    connectThread = new ConnectThread(device);
-                    connectThread.start();
-                }
-            }
+            connectDevice(data, false);
         }
     }
     @Override
@@ -211,6 +277,7 @@ public class MyActivity extends Activity {
             if (mBluetoothAdapter != null) {
                 mBluetoothAdapter.cancelDiscovery();
             }
+            if (mChatService != null) mChatService.stop();
             while (!connectedThread.isInterrupted());
             if(BTSocket!=null)
                 BTSocket.close();
@@ -244,6 +311,15 @@ public class MyActivity extends Activity {
             }
         });
         return messageWithNewLineAndResult;
+    }
+    private void connectDevice(Intent data, boolean secure) {
+        // Get the device MAC address
+        String address = data.getExtras()
+                .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Attempt to connect to the device
+        mChatService.connect(device, secure);
     }
 /*
     private final LocationListener mLocationListener = new LocationListener() {
@@ -290,9 +366,9 @@ public class MyActivity extends Activity {
             // because mmSocket is final
             BluetoothSocket tmp = null;
             mmDevice = device;
-            //synchronized (MyActivity.this) {
+            synchronized (MyActivity.this) {
                 isConnected = false;
-            //}
+            }
 
             // Get a BluetoothSocket to connect with the given BluetoothDevice
             try {
@@ -311,10 +387,10 @@ public class MyActivity extends Activity {
                     // Connect the device through the socket. This will block
                     // until it succeeds or throws an exception
                     mmSocket.connect();
-                    //synchronized (MyActivity.this) {
+                    synchronized (MyActivity.this) {
                         isConnected = true;
                     sendToast("Connected");
-                    //}
+                    }
                 } catch (IOException connectException) {
                     // Unable to connect; close the socket and get out
                     Log.d("mmSocket.connect()", connectException.toString());
@@ -643,46 +719,12 @@ public class MyActivity extends Activity {
                         stringBuilderHttpPost.setLength(0);
                     }
                 } catch (Exception e) {
-                    normalClose=isConnected=false;
+                    synchronized (MyActivity.this) {
+                        normalClose = isConnected = false;
+                    }
                     Log.d("ConnectedThread111",e.toString());
                     cancel();
-                    //while (!isConnected) {
-                        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-// If there are paired devices
-                        //ListView Olalist = (ListView) this.findViewById(R.id.listview1);
-                        //ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1);
-                        if (pairedDevices.size() > 0) {
-                            // Loop through paired devices
-                            for (BluetoothDevice device : pairedDevices) {
-                                // Add the name and address to an array adapter to show in a ListView
-                                //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                                Log.d("alonso2", "device:" + device.getName() + "\n" + device.getAddress() + "\n" + device.getName().contains(ODBIIDeviceName));
-                                if (device.getName().contains(ODBIIDeviceName)) {
-                                    //connect to device
-                                    while (!isConnected) {
-                                        connectThread = new ConnectThread(device);
-                                        connectThread.start();
-                                        try
-                                        {
-                                            Thread.sleep(1000);
-                                        }
-                                        catch (InterruptedException ex)
-                                        {
-                                            Thread.currentThread().interrupt(); // restore interrupted status
-                                            break;
-                                        }
-                                    }
-                                    break;
 
-                                }
-                            }
-                        } else {
-                            //IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);//註冊找到藍芽廣播
-                            //registerReceiver(mReceiver, filter);
-                            //mBluetoothAdapter.startDiscovery();
-                            Intent serverIntent = new Intent(myActivity, DeviceListActivity.class);
-                            startActivityForResult(serverIntent, 2);
-                        }
                     //}
                     //Olalist.setAdapter(mArrayAdapter);
                     //cancel();
@@ -828,6 +870,15 @@ public class MyActivity extends Activity {
                 myTextView.setText(text);
             }
         });
+    }
+    private final void setStatus(int resId) {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle(resId);
+    }
+
+    private final void setStatus(CharSequence subTitle) {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle(subTitle);
     }
     public class SendFuelLevelInputCmd extends Thread{
         private final OutputStream mmOutStream;
