@@ -182,6 +182,7 @@ public class BluetoothChatService {
         if (D) Log.d(TAG, "stop");
 
         if (mConnectThread != null) {
+            mConnectThread.interrupt();
             mConnectThread.cancel();
             mConnectThread = null;
         }
@@ -199,11 +200,13 @@ public class BluetoothChatService {
         }
 
         if (mSecureAcceptThread != null) {
+            mSecureAcceptThread.interrupt();
             mSecureAcceptThread.cancel();
             mSecureAcceptThread = null;
         }
 
         if (mInsecureAcceptThread != null) {
+            mInsecureAcceptThread.interrupt();
             mInsecureAcceptThread.cancel();
             mInsecureAcceptThread = null;
         }
@@ -299,7 +302,7 @@ public class BluetoothChatService {
             BluetoothSocket socket = null;
 
             // Listen to the server socket if we're not connected
-            while (mState != STATE_CONNECTED) {
+            while (mState != STATE_CONNECTED && !Thread.interrupted()) {
                 try {
                     // This is a blocking call and will only return on a
                     // successful connection or an exception
