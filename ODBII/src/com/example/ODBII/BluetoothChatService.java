@@ -187,7 +187,14 @@ public class BluetoothChatService {
         }
 
         if (mConnectedThread != null) {
+            mConnectedThread.interrupt();
             mConnectedThread.cancel();
+            //mConnectedThread.interrupt();
+            try {
+                mConnectedThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mConnectedThread = null;
         }
 
@@ -457,7 +464,7 @@ public class BluetoothChatService {
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
             // Keep listening to the InputStream while connected
-            while (true) {
+            while (!Thread.interrupted()) {
                 try {
                     // Read from the InputStream
                     //bytes = mmInStream.read(buffer);
@@ -717,11 +724,27 @@ public class BluetoothChatService {
                         stringBuilderHttpPost.setLength(0);
                     }
                 }catch(IOException e){
-                        Log.e(TAG, "disconnected", e);
+                    if(Thread.interrupted())
+                    {
+                        try {
+                            throw new InterruptedException();
+                        } catch (InterruptedException e1) {
+                            Log.e(TAG, "disconnected1", e1);
+                            Message msg = mHandler.obtainMessage(MyActivity.MESSAGE_TOAST);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(MyActivity.TOAST, "Device connection was lost");
+                            msg.setData(bundle);
+                            mHandler.sendMessage(msg);
+                            break;
+                        }
+                    }
+                    else {
+                        Log.e(TAG, "disconnected2", e);
                         connectionLost();
                         // Start the service over to restart listening mode
-                        BluetoothChatService.this.start();
+                        //BluetoothChatService.this.start();
                         break;
+                    }
                     }
                 }
             }
