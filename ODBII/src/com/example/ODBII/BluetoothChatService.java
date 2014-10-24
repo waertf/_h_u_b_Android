@@ -466,6 +466,11 @@ public class BluetoothChatService {
             // Keep listening to the InputStream while connected
             while (!Thread.interrupted()) {
                 try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
                     // Read from the InputStream
                     //bytes = mmInStream.read(buffer);
 
@@ -781,7 +786,7 @@ public class BluetoothChatService {
             Thread SendHttpPost = new Thread(httpPost);
             SendHttpPost.start();
             try {
-                SendHttpPost.join();
+                SendHttpPost.join(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
