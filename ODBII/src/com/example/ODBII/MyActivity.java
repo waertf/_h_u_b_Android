@@ -470,7 +470,7 @@ public class MyActivity extends Activity {
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
 
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!isInterrupted()) {
                 try {
                     //ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Read from the InputStream
@@ -887,7 +887,7 @@ public class MyActivity extends Activity {
             mmOutStream=outStrem;
         }
         public void run() {
-            while (!Thread.currentThread().isInterrupted())
+            while (!isInterrupted())
             {
                 write(FuelLevelInputCmd.getBytes());
                 try
@@ -896,7 +896,7 @@ public class MyActivity extends Activity {
                 }
                 catch (InterruptedException e)
                 {
-                    Thread.currentThread().interrupt(); // restore interrupted status
+                    interrupt(); // restore interrupted status
                     break;
                 }
                 write("ats\r".getBytes());
@@ -906,7 +906,7 @@ public class MyActivity extends Activity {
                 }
                 catch (InterruptedException e)
                 {
-                    Thread.currentThread().interrupt(); // restore interrupted status
+                    interrupt(); // restore interrupted status
                     break;
                 }
             }

@@ -302,7 +302,7 @@ public class BluetoothChatService {
             BluetoothSocket socket = null;
 
             // Listen to the server socket if we're not connected
-            while (mState != STATE_CONNECTED && !Thread.interrupted()) {
+            while (mState != STATE_CONNECTED && !isInterrupted()) {
                 try {
                     // This is a blocking call and will only return on a
                     // successful connection or an exception
@@ -467,7 +467,7 @@ public class BluetoothChatService {
             // Keep listening to the InputStream until an exception occurs
             double ODB2startTime=0;
             // Keep listening to the InputStream while connected
-            while (!Thread.interrupted()) {
+            while (!isInterrupted()) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -732,7 +732,7 @@ public class BluetoothChatService {
                         stringBuilderHttpPost.setLength(0);
                     }
                 }catch(IOException e){
-                    if(Thread.interrupted())
+                    if(isInterrupted())
                     {
                         try {
                             throw new InterruptedException();
@@ -804,7 +804,7 @@ public class BluetoothChatService {
             mmOutStream=outStrem;
         }
         public void run() {
-            while (!Thread.currentThread().isInterrupted())
+            while (!isInterrupted())
             {
                 write(FuelLevelInputCmd.getBytes());
                 try
@@ -813,7 +813,7 @@ public class BluetoothChatService {
                 }
                 catch (InterruptedException e)
                 {
-                    Thread.currentThread().interrupt(); // restore interrupted status
+                    interrupt(); // restore interrupted status
                     break;
                 }
 
@@ -824,7 +824,7 @@ public class BluetoothChatService {
                 }
                 catch (InterruptedException e)
                 {
-                    Thread.currentThread().interrupt(); // restore interrupted status
+                    interrupt(); // restore interrupted status
                     break;
                 }
 
