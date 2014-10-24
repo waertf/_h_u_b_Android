@@ -786,7 +786,7 @@ public class BluetoothChatService {
             Thread SendHttpPost = new Thread(httpPost);
             SendHttpPost.start();
             try {
-                SendHttpPost.join(1000);
+                SendHttpPost.join(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
