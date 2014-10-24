@@ -52,7 +52,7 @@ public class MyActivity extends Activity {
      * Called when the activity is first created.
      */
     private final int _timeoutObdCommand = 1000;
-    private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
+    private final String _httpRequestUrl="https://posttestserver.com/post.php";
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
     private Activity myActivity;
@@ -304,8 +304,8 @@ public class MyActivity extends Activity {
 
     private String SendHttpPost(String message) {
         final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
-        final Handler httpHeadler = new Handler();
-        httpHeadler.post(httpPost);
+        //final Handler httpHeadler = new Handler();
+        //httpHeadler.post(httpPost);
         /*
         new Thread(new Runnable() {
 
@@ -315,7 +315,7 @@ public class MyActivity extends Activity {
             }
         }).start();
 */
-        /*
+
         Thread SendHttpPost = new Thread(httpPost);
         SendHttpPost.start();
         try {
@@ -323,7 +323,7 @@ public class MyActivity extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        */
+
         final String messageWithNewLineAndResult = httpPost.getResult()+"\n\n"+message.replaceAll(",","\n");
         myActivity.runOnUiThread(new Runnable() {
 
