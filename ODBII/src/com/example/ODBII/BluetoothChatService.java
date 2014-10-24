@@ -805,9 +805,9 @@ public class BluetoothChatService {
             return input >= 0 && input <= 9?(char)(input + 48):(char)(65 + (input - 10));
         }
         private String SendHttpPost(String message) {
-            final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
-            Handler httpHeadler = new Handler();
-            httpHeadler.post(httpPost);
+            //final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
+            //Handler httpHeadler = new Handler();
+            //httpHeadler.post(httpPost);
         /*
         Thread SendHttpPost = new Thread(httpPost);
         SendHttpPost.start();
@@ -817,8 +817,9 @@ public class BluetoothChatService {
             e.printStackTrace();
         }
         */
-            final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
-            return messageWithNewLineAndResult;
+            //final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
+            //return messageWithNewLineAndResult;
+            return null;
         }
     }
     public class SendFuelLevelInputCmd extends Thread{

@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class MyActivity extends Activity {
+public class MyActivity extends Activity implements TaskCompleted{
     /**
      * Called when the activity is first created.
      */
@@ -152,7 +152,7 @@ public class MyActivity extends Activity {
                     // construct a string from the valid bytes in the buffer
                     final String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
-
+                    /*
                     myActivity.runOnUiThread(new Runnable() {
 
                         @Override
@@ -161,7 +161,7 @@ public class MyActivity extends Activity {
                             myTextView.setText(readMessage);
                         }
                     });
-
+                    */
                     final String receive = readMessage.replace("\n", ",");
                     SendHttpPost(receive);
                     break;
@@ -303,7 +303,8 @@ public class MyActivity extends Activity {
     }
 
     private String SendHttpPost(String message) {
-        final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
+        new HttpPostRequest(myActivity).execute(_httpRequestUrl,message);
+        //final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
         //final Handler httpHeadler = new Handler();
         //httpHeadler.post(httpPost);
         /*
@@ -315,7 +316,7 @@ public class MyActivity extends Activity {
             }
         }).start();
 */
-
+/*
         Thread SendHttpPost = new Thread(httpPost);
         SendHttpPost.start();
         try {
@@ -334,6 +335,8 @@ public class MyActivity extends Activity {
             }
         });
         return messageWithNewLineAndResult;
+        */
+        return null;
     }
     private void connectDevice(Intent data, boolean secure) {
         // Get the device MAC address
@@ -344,42 +347,55 @@ public class MyActivity extends Activity {
         // Attempt to connect to the device
         mChatService.connect(device, secure);
     }
-/*
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(final Location location) {
-            final String loca="lat:"+location.getLatitude()+","+"long:"+location.getLongitude();
-            Runnable httpPost = new HttpPostRequest(_httpRequestUrl,loca);
-            Thread SendHttpPost = new Thread(httpPost);
-            SendHttpPost.start();
-            Log.d(this.toString(),loca);
 
-            myActivity.runOnUiThread(new Runnable() {
+    @Override
+    public void onTaskComplete(final String result) {
+        myActivity.runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    TextView myTextView = (TextView)findViewById(R.id.mytextview);
-                    myTextView.setText(loca);
-                }
-            });
-        }
+            @Override
+            public void run() {
+                TextView myTextView = (TextView)findViewById(R.id.mytextview);
+                myTextView.setText(result.replace(",","\n"));
+            }
+        });
+    }
 
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
+    /*
+        private final LocationListener mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(final Location location) {
+                final String loca="lat:"+location.getLatitude()+","+"long:"+location.getLongitude();
+                Runnable httpPost = new HttpPostRequest(_httpRequestUrl,loca);
+                Thread SendHttpPost = new Thread(httpPost);
+                SendHttpPost.start();
+                Log.d(this.toString(),loca);
 
-        }
+                myActivity.runOnUiThread(new Runnable() {
 
-        @Override
-        public void onProviderEnabled(String s) {
+                    @Override
+                    public void run() {
+                        TextView myTextView = (TextView)findViewById(R.id.mytextview);
+                        myTextView.setText(loca);
+                    }
+                });
+            }
 
-        }
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-        @Override
-        public void onProviderDisabled(String s) {
+            }
 
-        }
-    };
-    */
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        */
     public class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
