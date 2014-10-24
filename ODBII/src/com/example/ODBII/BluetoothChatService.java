@@ -184,6 +184,11 @@ public class BluetoothChatService {
         if (mConnectThread != null) {
             mConnectThread.interrupt();
             mConnectThread.cancel();
+            try {
+                mConnectThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mConnectThread = null;
         }
 
@@ -202,17 +207,32 @@ public class BluetoothChatService {
         if (mSecureAcceptThread != null) {
             mSecureAcceptThread.interrupt();
             mSecureAcceptThread.cancel();
+            try {
+                mSecureAcceptThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mSecureAcceptThread = null;
         }
 
         if (mInsecureAcceptThread != null) {
             mInsecureAcceptThread.interrupt();
             mInsecureAcceptThread.cancel();
+            try {
+                mInsecureAcceptThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mInsecureAcceptThread = null;
         }
         if(sendFuelLevelInputCmd!=null)
         {
             sendFuelLevelInputCmd.interrupt();
+            try {
+                sendFuelLevelInputCmd.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             sendFuelLevelInputCmd=null;
         }
         setState(STATE_NONE);
@@ -702,7 +722,7 @@ public class BluetoothChatService {
 
                     if (stringBuilderHttpPost.length() > 0) {
                         Log.d("alonso3", stringBuilderHttpPost.toString());
-                        Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
+                        //Log.d(this.toString(),SendHttpPost(stringBuilderHttpPost.toString()));
                         //stringBuilderHttpPost.setLength(0);
                         /*
                         for (byte b : data) {
@@ -786,13 +806,17 @@ public class BluetoothChatService {
         }
         private String SendHttpPost(String message) {
             final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
-            Thread SendHttpPost = new Thread(httpPost);
-            SendHttpPost.start();
-            try {
-                SendHttpPost.join(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Handler httpHeadler = new Handler();
+            httpHeadler.post(httpPost);
+        /*
+        Thread SendHttpPost = new Thread(httpPost);
+        SendHttpPost.start();
+        try {
+            SendHttpPost.join(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        */
             final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
             return messageWithNewLineAndResult;
         }
