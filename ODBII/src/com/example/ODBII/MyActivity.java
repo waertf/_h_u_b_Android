@@ -152,6 +152,7 @@ public class MyActivity extends Activity {
                     // construct a string from the valid bytes in the buffer
                     final String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+
                     myActivity.runOnUiThread(new Runnable() {
 
                         @Override
@@ -160,6 +161,9 @@ public class MyActivity extends Activity {
                             myTextView.setText(readMessage);
                         }
                     });
+
+                    final String receive = readMessage.replace("\n", ",");
+                    SendHttpPost(receive);
                     break;
                 case MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -255,6 +259,12 @@ public class MyActivity extends Activity {
             connectDevice(data, false);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -294,14 +304,27 @@ public class MyActivity extends Activity {
 
     private String SendHttpPost(String message) {
         final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
+        final Handler httpHeadler = new Handler();
+        httpHeadler.post(httpPost);
+        /*
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                httpHeadler.post(httpPost);
+            }
+        }).start();
+*/
+        /*
         Thread SendHttpPost = new Thread(httpPost);
         SendHttpPost.start();
         try {
-            SendHttpPost.join();
+            SendHttpPost.join(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        final String messageWithNewLineAndResult = httpPost.getResult()+"\n"+message.replaceAll(",","\n");
+        */
+        final String messageWithNewLineAndResult = httpPost.getResult()+"\n\n"+message.replaceAll(",","\n");
         myActivity.runOnUiThread(new Runnable() {
 
             @Override
