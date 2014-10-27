@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -182,6 +183,8 @@ public class MyActivity extends Activity implements TaskCompleted{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        TextView myTextView = (TextView)findViewById(R.id.mytextview);
+        myTextView.setMovementMethod(new ScrollingMovementMethod());
         myActivity=this;
         context = getApplicationContext();
         // Get local Bluetooth adapter
@@ -303,7 +306,7 @@ public class MyActivity extends Activity implements TaskCompleted{
     }
 
     private String SendHttpPost(String message) {
-        new HttpPostRequest(myActivity).execute(_httpRequestUrl,message);
+        new HttpPostRequest(myActivity).execute(_httpRequestUrl, message);
         //final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
         //final Handler httpHeadler = new Handler();
         //httpHeadler.post(httpPost);
