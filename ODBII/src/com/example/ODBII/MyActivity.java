@@ -12,6 +12,8 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -357,12 +359,14 @@ public class MyActivity extends Activity implements TaskCompleted{
 
     @Override
     public void onTaskComplete(final String result) {
+        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 50);
+        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
         myActivity.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
                 TextView myTextView = (TextView)findViewById(R.id.mytextview);
-                myTextView.setText(Html.fromHtml(result.replace(",","<br>")));
+                myTextView.setText(Html.fromHtml(result.replace(",", "<br>")));
             }
         });
     }
