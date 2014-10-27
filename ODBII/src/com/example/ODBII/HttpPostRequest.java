@@ -52,7 +52,7 @@ public class HttpPostRequest extends AsyncTask<String,String,String> {
     protected String doInBackground(String... strings) {
         this.URL=strings[0];
         this.parameter=strings[1];
-        java.util.Date date= new java.util.Date();
+        //java.util.Date date= new java.util.Date();
         try {
             HashMap<String, String> myMap = new HashMap<String, String>();
             String s = "SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3";
@@ -68,7 +68,7 @@ public class HttpPostRequest extends AsyncTask<String,String,String> {
         catch (Exception ex){
             Log.d(this.toString(),ex.toString());
         }
-        return "-send http post:"+new Timestamp(date.getTime())+ "," + parameter + "-result:" + result;
+        return "-send http post:"+new Timestamp(System.currentTimeMillis())+ "," + parameter + "-result:" + result;
     }
 
     @Override
