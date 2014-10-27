@@ -44,6 +44,7 @@ import pt.lighthouselabs.obd.commands.temperature.AmbientAirTemperatureObdComman
 import pt.lighthouselabs.obd.commands.temperature.EngineCoolantTemperatureObdCommand;
 import pt.lighthouselabs.obd.enums.ObdProtocols;
 
+import javax.xml.datatype.Duration;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -301,6 +302,8 @@ public class MyActivity extends Activity implements TaskCompleted{
             if(BTSocket!=null)
                 BTSocket.close();
             BTSocket=null;
+            System.gc();
+            android.os.Process.killProcess(android.os.Process.myPid());
             // Unregister broadcast listeners
             //this.unregisterReceiver(mReceiver);
         }
