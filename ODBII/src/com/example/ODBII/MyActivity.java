@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -361,7 +362,7 @@ public class MyActivity extends Activity implements TaskCompleted{
             @Override
             public void run() {
                 TextView myTextView = (TextView)findViewById(R.id.mytextview);
-                myTextView.setText(result.replace(",","\n"));
+                myTextView.setText(Html.fromHtml(result.replace(",","<br>")));
             }
         });
     }

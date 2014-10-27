@@ -68,7 +68,7 @@ public class HttpPostRequest extends AsyncTask<String,String,String> {
         catch (Exception ex){
             Log.d(this.toString(),ex.toString());
         }
-        return "-send http post:"+new Timestamp(System.currentTimeMillis())+ "," + parameter + "-result:" + result;
+        return "<font color=\"Lime\">-send http post:"+new Timestamp(System.currentTimeMillis())+ "</font>," + parameter + "<font color=\"Yellow\">-result:" + result+"</font>";
     }
 
     @Override
