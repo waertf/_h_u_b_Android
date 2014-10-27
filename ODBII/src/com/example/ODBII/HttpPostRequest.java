@@ -65,7 +65,7 @@ public class HttpPostRequest extends AsyncTask<String,String,String> {
         catch (Exception ex){
             Log.d(this.toString(),ex.toString());
         }
-        return "send http post-" + parameter + "-result:" + result;
+        return "-send http post," + parameter + "-result:" + result;
     }
 
     @Override
