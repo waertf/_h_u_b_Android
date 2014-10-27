@@ -18,6 +18,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -185,6 +186,8 @@ public class MyActivity extends Activity implements TaskCompleted{
         setContentView(R.layout.main);
         TextView myTextView = (TextView)findViewById(R.id.mytextview);
         myTextView.setMovementMethod(new ScrollingMovementMethod());
+        TextView connectStatus = (TextView)findViewById(R.id.connectStatus);
+        connectStatus.setVisibility(View.GONE);
         myActivity=this;
         context = getApplicationContext();
         // Get local Bluetooth adapter
