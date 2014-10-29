@@ -207,6 +207,10 @@ public class MyActivity extends Activity implements TaskCompleted{
             boolean result =mBluetoothAdapter.enable();
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
+        while (!mBluetoothAdapter.isEnabled());
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+        /*
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 // If there are paired devices
         ListView Olalist = (ListView) this.findViewById(R.id.listview1);
@@ -234,6 +238,7 @@ public class MyActivity extends Activity implements TaskCompleted{
             startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
         }
         Olalist.setAdapter(mArrayAdapter);
+        */
         /*
         new Thread(new Runnable() {
             public void run() {
@@ -302,6 +307,11 @@ public class MyActivity extends Activity implements TaskCompleted{
             if(BTSocket!=null)
                 BTSocket.close();
             BTSocket=null;
+            if (mBluetoothAdapter.isEnabled()) {
+                boolean result =mBluetoothAdapter.disable();
+                Log.i("mBluetoothAdapter.enable",String.valueOf(result));
+            }
+            while (mBluetoothAdapter.isEnabled());
             System.gc();
             android.os.Process.killProcess(android.os.Process.myPid());
             // Unregister broadcast listeners
