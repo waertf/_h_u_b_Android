@@ -13,7 +13,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -372,8 +375,15 @@ public class MyActivity extends Activity implements TaskCompleted{
 
     @Override
     public void onTaskComplete(final String result) {
-        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 50);
-        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+        //ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 50);
+        //toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         myActivity.runOnUiThread(new Runnable() {
 
             @Override
