@@ -25,10 +25,7 @@ import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import pt.lighthouselabs.obd.commands.SpeedObdCommand;
 import pt.lighthouselabs.obd.commands.control.TroubleCodesObdCommand;
 import pt.lighthouselabs.obd.commands.engine.EngineLoadObdCommand;
@@ -56,7 +53,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class MyActivity extends FragmentActivity implements TaskCompleted{
+public class MyActivity extends FragmentActivity implements TaskCompleted,InputCarID.NoticeDialogListener {
     /**
      * Called when the activity is first created.
      */
@@ -417,6 +414,18 @@ public class MyActivity extends FragmentActivity implements TaskCompleted{
                 myTextView.setText(Html.fromHtml(result.replace(",", "<br>")));
             }
         });
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
+        Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
+        Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
     }
 
     /*
