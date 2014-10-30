@@ -310,11 +310,13 @@ public class MyActivity extends Activity implements TaskCompleted{
             if(BTSocket!=null)
                 BTSocket.close();
             BTSocket=null;
+            /*
             if (mBluetoothAdapter.isEnabled()) {
                 boolean result =mBluetoothAdapter.disable();
                 Log.i("mBluetoothAdapter.enable",String.valueOf(result));
             }
             while (mBluetoothAdapter.isEnabled());
+            */
             System.gc();
             android.os.Process.killProcess(android.os.Process.myPid());
             // Unregister broadcast listeners
