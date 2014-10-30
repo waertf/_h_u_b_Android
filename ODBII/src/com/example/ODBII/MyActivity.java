@@ -98,7 +98,7 @@ public class MyActivity extends FragmentActivity implements TaskCompleted,InputC
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
     private ArrayAdapter<String> mConversationArrayAdapter;
-    public String CarID=null;
+    public static String CarID=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -422,13 +422,18 @@ public class MyActivity extends FragmentActivity implements TaskCompleted,InputC
     public void onDialogPositiveClick(DialogFragment dialog) {
         EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
         savePreferences("CarID",editText.getText().toString());
-        Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        CarID=editText.getText().toString();
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
-        Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
     }
 
     /*
