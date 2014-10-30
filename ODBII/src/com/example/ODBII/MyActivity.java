@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -56,7 +58,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class MyActivity extends Activity implements TaskCompleted{
+public class MyActivity extends FragmentActivity implements TaskCompleted{
     /**
      * Called when the activity is first created.
      */
@@ -64,7 +66,7 @@ public class MyActivity extends Activity implements TaskCompleted{
     private final String _httpRequestUrl="https://posttestserver.com/post.php";
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
-    private Activity myActivity;
+    private FragmentActivity myActivity;
     private BluetoothAdapter mBluetoothAdapter = null;
     BluetoothDevice device=null;
     // Unique UUID for this application
@@ -191,6 +193,9 @@ public class MyActivity extends Activity implements TaskCompleted{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        DialogFragment dialog = new InputCarID();
+        dialog.show(getSupportFragmentManager(),"");
         TextView myTextView = (TextView)findViewById(R.id.mytextview);
         myTextView.setMovementMethod(new ScrollingMovementMethod());
         TextView connectStatus = (TextView)findViewById(R.id.connectStatus);
@@ -211,8 +216,8 @@ public class MyActivity extends Activity implements TaskCompleted{
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
         while (!mBluetoothAdapter.isEnabled());
-        Intent serverIntent = new Intent(this, DeviceListActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+        //Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        //startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
         /*
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 // If there are paired devices
@@ -329,6 +334,11 @@ public class MyActivity extends Activity implements TaskCompleted{
 
     }
 
+    public void StartBTDeviceClass()
+    {
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+    }
     private String SendHttpPost(String message) {
         new HttpPostRequest(myActivity).execute(_httpRequestUrl, message);
         //final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
