@@ -5,10 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,14 +18,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import pt.lighthouselabs.obd.commands.SpeedObdCommand;
 import pt.lighthouselabs.obd.commands.control.TroubleCodesObdCommand;
 import pt.lighthouselabs.obd.commands.engine.EngineLoadObdCommand;
@@ -56,7 +53,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class MyActivity extends Activity implements TaskCompleted{
+public class MyActivity extends FragmentActivity implements TaskCompleted,InputCarID.NoticeDialogListener {
     /**
      * Called when the activity is first created.
      */
@@ -64,7 +61,7 @@ public class MyActivity extends Activity implements TaskCompleted{
     private final String _httpRequestUrl="https://posttestserver.com/post.php";
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
-    private Activity myActivity;
+    private FragmentActivity myActivity;
     private BluetoothAdapter mBluetoothAdapter = null;
     BluetoothDevice device=null;
     // Unique UUID for this application
@@ -101,6 +98,7 @@ public class MyActivity extends Activity implements TaskCompleted{
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
     private ArrayAdapter<String> mConversationArrayAdapter;
+    public static String CarID=null;
     private final BroadcastReceiver mReceiver=new BroadcastReceiver(){
         public void onReceive(Context context,Intent intent){
             String action=intent.getAction();
@@ -191,6 +189,10 @@ public class MyActivity extends Activity implements TaskCompleted{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        DialogFragment dialog = new InputCarID();
+        dialog.show(getSupportFragmentManager(),"");
+
         TextView myTextView = (TextView)findViewById(R.id.mytextview);
         myTextView.setMovementMethod(new ScrollingMovementMethod());
         TextView connectStatus = (TextView)findViewById(R.id.connectStatus);
@@ -211,8 +213,8 @@ public class MyActivity extends Activity implements TaskCompleted{
             Log.i("mBluetoothAdapter.enable",String.valueOf(result));
         }
         while (!mBluetoothAdapter.isEnabled());
-        Intent serverIntent = new Intent(this, DeviceListActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+        //Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        //startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
         /*
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 // If there are paired devices
@@ -329,6 +331,26 @@ public class MyActivity extends Activity implements TaskCompleted{
 
     }
 
+    public void StartBTDeviceClass()
+    {
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+    }
+
+    public void savePreferences(String key, String value) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String LoadSavePreFerences(String key)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        return sharedPreferences.getString(key,null);
+    }
     private String SendHttpPost(String message) {
         new HttpPostRequest(myActivity).execute(_httpRequestUrl, message);
         //final HttpPostRequest httpPost = new HttpPostRequest(_httpRequestUrl,message);
@@ -394,6 +416,24 @@ public class MyActivity extends Activity implements TaskCompleted{
                 myTextView.setText(Html.fromHtml(result.replace(",", "<br>")));
             }
         });
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
+        savePreferences("CarID",editText.getText().toString());
+        //Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        CarID=editText.getText().toString();
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        EditText editText =(EditText)dialog.getDialog().findViewById(R.id.editText);
+        //Toast.makeText(this,editText.getText(),Toast.LENGTH_SHORT).show();
+        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
     }
 
     /*

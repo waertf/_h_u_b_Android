@@ -55,7 +55,7 @@ public class BluetoothChatService {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
     Context mContext=null;
-    String GetBT6000sBTName=null;
+    //public static String GetBT6000sBTName=null;
     final String FuelLevelInputCmd="012F\r";
     Thread sendFuelLevelInputCmd=null;
     private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
@@ -399,7 +399,8 @@ public class BluetoothChatService {
                 Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
             }
             mmSocket = tmp;
-            GetBT6000sBTName=device.getName();
+            //GetBT6000sBTName=device.getName();
+            //GetBT6000sBTName=MyActivity.CarID;
         }
 
         public void run() {
@@ -691,7 +692,7 @@ public class BluetoothChatService {
                     if (System.currentTimeMillis() - ODB2startTime > ODB2SendDelayTime && data.length>0) {
                         ODB2SendDelayTime = 15 * 1000;
                         ODB2startTime = 0;
-                        stringBuilderHttpPost.append("ID:" + GetBT6000sBTName + ",");
+                        stringBuilderHttpPost.append("ID:" + MyActivity.CarID + ",");
                         stringBuilderHttpPost.append("FuelSystemStatus:" + FstatusSB.toString() + ",");//燃油系統狀態 純文字用"#"分隔
                         stringBuilderHttpPost.append("EngineLoading:" + EngineLoading + ",");//引擎負荷 單位：%
                         stringBuilderHttpPost.append("EngineTemperature:" + EngineTemperature + ",");//引擎溫度 單位：°C
