@@ -59,6 +59,8 @@ public class BluetoothChatService {
     final String FuelLevelInputCmd="012F\r";
     Thread sendFuelLevelInputCmd=null;
     private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
+    // prevent restart after onDestroy
+    private boolean isDestroyed = false;
     /**
      * Constructor. Prepares a new BluetoothChat session.
      * @param context  The UI Activity Context
@@ -179,6 +181,7 @@ public class BluetoothChatService {
      * Stop all threads
      */
     public synchronized void stop() {
+        isDestroyed = true;
         if (D) Log.d(TAG, "stop");
 
         if (mConnectThread != null) {
@@ -267,6 +270,7 @@ public class BluetoothChatService {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
+        if(!isDestroyed)
         BluetoothChatService.this.start();
     }
 
@@ -282,6 +286,7 @@ public class BluetoothChatService {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
+        if(!isDestroyed)
         BluetoothChatService.this.start();
     }
 
