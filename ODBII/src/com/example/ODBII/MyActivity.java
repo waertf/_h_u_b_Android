@@ -58,7 +58,8 @@ public class MyActivity extends FragmentActivity implements TaskCompleted,InputC
      * Called when the activity is first created.
      */
     private final int _timeoutObdCommand = 1000;
-    private final String _httpRequestUrl="https://posttestserver.com/post.php";
+    //private final String _httpRequestUrl="https://posttestserver.com/post.php";
+    private final String _httpRequestUrl="http://192.168.1.13/new_tms/work/carInfo.json";
     private final long LOCATION_REFRESH_TIME=1;
     private final float LOCATION_REFRESH_DISTANCE=1;
     private FragmentActivity myActivity;
